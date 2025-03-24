@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', 'Arial', sans-serif;
+}
+
+.header_parallax{
+    min-height: 500px;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+.header_parallax {
+    background-image: url(imgs/background_1.png);
+}
+
+
+.container {
+    min-height: 100vh;
+    background-color: #333;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+}
+  
