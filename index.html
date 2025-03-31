@@ -1,40 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css"> 
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Card Slider HTML & CSS | CodingNepal</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="navbar.css">
 </head>
-
 <body>
-    <header>
-        <nav>
-       
-          <div class="mobile-menu">
-            <div class="line1"></div>
-            <div class="line2"></div>
-            <div class="line3"></div>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="user-account">
+        <div class="user-profile">
+          <img src="images/profile-img.jpg" alt="Profile Image" />
+          <div class="user-detail">
+            <h3>Eva Murphy</h3>
+            <span>Web Developer</span>
           </div>
-          <ul class="nav-list">
-            <li><a href="#">Início</a></li>
-            <li><a href="#">Sobre</a></li>
-            <li><a href="#">Projetos</a></li>
-            <li><a href="#">Contato</a></li>
-          </ul>
-        </nav>
-      </header>
+        </div>
+  </aside>
+  <header class="header-top">
+    <img src="cju.jpg" style="object-fit: font;z-index: 1;">
+    </h1>LOCALIZAÇÃO HORARIO DE FUNCIONAMENTO</h1>
+</header>
+  <main>  
+    <div class="container swiper">
+    <div class="card-wrapper">
+      <!-- Card slides container -->
+      <ul class="card-list swiper-wrapper">
+        <li class="card-item swiper-slide">
+          <a href="#" class="card-link">
+            <img src="images/designer.jpg" alt="Card Image" class="card-image">
+            <p class="badge badge-designer">Designer</p>
+            <h2 class="card-title">Lorem ipsum dolor sit explicabo adipisicing elit</h2>
+            <button class="card-button material-symbols-rounded">arrow_forward</button>
+          </a>
+        </li>
+        <li class="card-item swiper-slide">
+          <a href="#" class="card-link">
+            <img src="images/developer.jpg" alt="Card Image" class="card-image">
+            <p class="badge badge-developer">Developer</p>
+            <h2 class="card-title">Lorem ipsum dolor sit explicabo adipisicing elit</h2>
+            <button class="card-button material-symbols-rounded">arrow_forward</button>
+          </a>
+        </li>
+        <li class="card-item swiper-slide">
+          <a href="#" class="card-link">
+            <img src="images/marketer.jpg" alt="Card Image" class="card-image">
+            <p class="badge badge-marketer">Marketer</p>
+            <h2 class="card-title">Lorem ipsum dolor sit explicabo adipisicing elit</h2>
+            <button class="card-button material-symbols-rounded">arrow_forward</button>
+          </a>
+        </li>
+        <li class="card-item swiper-slide">
+          <a href="#" class="card-link">
+            <img src="images/gamer.jpg" alt="Card Image" class="card-image">
+            <p class="badge badge-gamer">Gamer</p>
+            <h2 class="card-title">Lorem ipsum dolor sit explicabo adipisicing elit</h2>
+            <button class="card-button material-symbols-rounded">arrow_forward</button>
+          </a>
+        </li>
+        <li class="card-item swiper-slide">
+          <a href="#" class="card-link">
+            <img src="images/editor.jpg" alt="Card Image" class="card-image">
+            <p class="badge badge-editor">Editor</p>
+            <h2 class="card-title">Lorem ipsum dolor sit explicabo adipisicing elit</h2>
+            <button class="card-button material-symbols-rounded">arrow_forward</button>
+          </a>
+        </li>
+      </ul>
 
-    <main class="header_parallax"></main>
-    <div class="container">
-        <h1>CONTEUDO
-        </h1>
+       <!-- Pagination -->
+      <div class="swiper-pagination"></div>
+
+      <div class="swiper-slide-button swiper-button-prev"></div>
+      <div class="swiper-slide-button swiper-button-next"></div>
     </div>
-    <div class="mid_parallax"></div>
+  </div>
+  <section class="noticias"></section>
+  </main>
+  
+  <footer style="height: 30vh; background-color: black;"></footer>
+
+  <!-- Linking SwiperJS script -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  
+  <script src="script.js"></script>
 </body>
-
 </html>
-
-
-
