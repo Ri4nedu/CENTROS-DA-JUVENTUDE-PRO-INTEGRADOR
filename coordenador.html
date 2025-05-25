@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUAP IFPR - Professor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            width: 50px;
+            height: 50px;
+            background: #2a5298;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: #2a5298;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+
+        .sidebar {
+            width: 250px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem 0;
+        }
+
+        .menu-item {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .menu-item:hover {
+            background: rgba(42, 82, 152, 0.1);
+            border-left-color: #2a5298;
+        }
+
+        .menu-item.active {
+            background: rgba(42, 82, 152, 0.2);
+            border-left-color: #2a5298;
+            font-weight: bold;
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .page {
+            display: none;
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-title {
+            color: #2a5298;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .table th {
+            background: #2a5298;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .btn {
+            background: #2a5298;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #1e3c72;
+            transform: translateY(-2px);
+        }
+
+        .btn-success { background: #28a745; }
+        .btn-warning { background: #ffc107; color: #333; }
+        .btn-danger { background: #dc3545; }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 2rem;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .grade-input {
+            width: 80px;
+            text-align: center;
+        }
+
+        .attendance-checkbox {
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding: 1rem 0;
+            }
+            
+            .menu-item {
+                padding: 0.75rem 1rem;
+            }
+            
+            .content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo img">IFPR</div>
+            <div>
+                <h2>SUAP IFPR</h2>
+                <small>Sistema Unificado de Administração Pública</small>
+            </div>
+        </div>
+        <div class="user-info">
+            <span>Prof. Maria Silva</span>
+            <div class="user-avatar">MS</div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <nav class="sidebar">
+            <div class="menu-item active" onclick="showPage('dashboard')">
+                📊 Dashboard
+            </div>
+            <div class="menu-item" onclick="showPage('turmas')">
+                👥 Minhas Turmas
+            </div>
+            <div class="menu-item" onclick="showPage('notas')">
+                📝 Lançar Notas
+            </div>
+            <div class="menu-item" onclick="showPage('frequencia')">
+                ✅ Frequência
+            </div>
+            <div class="menu-item" onclick="showPage('materiais')">
+                📚 Materiais
+            </div>
+            <div class="menu-item" onclick="showPage('horarios')">
+                🕐 Horários
+            </div>
+        </nav>
+
+        <main class="content">
+            <!-- Dashboard -->
+            <div id="dashboard" class="page active">
+                <h1 class="page-title">Dashboard - Professor</h1>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">5</div>
+                        <div>Turmas Ativas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">142</div>
+                        <div>Total de Alunos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">12</div>
+                        <div>Aulas Hoje</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">8</div>
+                        <div>Avaliações Pendentes</div>
+                    </div>
+                </div>
+
+                <h3>Próximas Aulas</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Horário</th>
+                            <th>Disciplina</th>
+                            <th>Turma</th>
+                            <th>Sala</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>08:00 - 09:40</td>
+                            <td>Programação Web</td>
+                            <td>INFO 3A</td>
+                            <td>Lab 01</td>
+                        </tr>
+                        <tr>
+                            <td>10:00 - 11:40</td>
+                            <td>Banco de Dados</td>
+                            <td>INFO 2B</td>
+                            <td>Lab 02</td>
+                        </tr>
+                        <tr>
+                            <td>14:00 - 15:40</td>
+                            <td>Algoritmos</td>
+                            <td>INFO 1A</td>
+                            <td>Sala 15</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Minhas Turmas -->
+            <div id="turmas" class="page">
+                <h1 class="page-title">Minhas Turmas</h1>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">INFO 1A</div>
+                        <div>28 Alunos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">INFO 2B</div>
+                        <div>30 Alunos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">INFO 3A</div>
+                        <div>25 Alunos</div>
+                    </div>
+                </div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Turma</th>
+                            <th>Disciplina</th>
+                            <th>Alunos</th>
+                            <th>Período</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>INFO 1A</td>
+                            <td>Algoritmos e Programação</td>
+                            <td>28</td>
+                            <td>2024/1</td>
+                            <td>
+                                <button class="btn btn-success">Ver Alunos</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>INFO 2B</td>
+                            <td>Banco de Dados</td>
+                            <td>30</td>
+                            <td>2024/1</td>
+                            <td>
+                                <button class="btn btn-success">Ver Alunos</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>INFO 3A</td>
+                            <td>Programação Web</td>
+                            <td>25</td>
+                            <td>2024/1</td>
+                            <td>
+                                <button class="btn btn-success">Ver Alunos</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Lançar Notas -->
+            <div id="notas" class="page">
+                <h1 class="page-title">Lançamento de Notas</h1>
+                
+                <div class="form-group">
+                    <label>Selecionar Turma e Avaliação:</label>
+                    <select class="form-control" onchange="loadGrades()">
+                        <option>INFO 3A - Programação Web - Prova 1</option>
+                        <option>INFO 2B - Banco de Dados - Trabalho 1</option>
+                        <option>INFO 1A - Algoritmos - Prova 2</option>
+                    </select>
+                </div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Matrícula</th>
+                            <th>Nome do Aluno</th>
+                            <th>Nota</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="grades-table">
+                        <tr>
+                            <td>2024001</td>
+                            <td>João Silva Santos</td>
+                            <td><input type="number" class="form-control grade-input" value="8.5" min="0" max="10" step="0.1"></td>
+                            <td><span class="btn btn-success">Aprovado</span></td>
+                        </tr>
+                        <tr>
+                            <td>2024002</td>
+                            <td>Maria Oliveira Costa</td>
+                            <td><input type="number" class="form-control grade-input" value="7.2" min="0" max="10" step="0.1"></td>
+                            <td><span class="btn btn-success">Aprovado</span></td>
+                        </tr>
+                        <tr>
+                            <td>2024003</td>
+                            <td>Pedro Mendes Lima</td>
+                            <td><input type="number" class="form-control grade-input" value="5.8" min="0" max="10" step="0.1"></td>
+                            <td><span class="btn btn-warning">Recuperação</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <button class="btn" onclick="saveGrades()">Salvar Notas</button>
+            </div>
+
+            <!-- Frequência -->
+            <div id="frequencia" class="page">
+                <h1 class="page-title">Controle de Frequência</h1>
+                
+                <div class="form-group">
+                    <label>Data da Aula:</label>
+                    <input type="date" class="form-control" value="2024-05-25">
+                </div>
+                
+                <div class="form-group">
+                    <label>Turma:</label>
+                    <select class="form-control">
+                        <option>INFO 3A - Programação Web</option>
+                        <option>INFO 2B - Banco de Dados</option>
+                        <option>INFO 1A - Algoritmos</option>
+                    </select>
+                </div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Matrícula</th>
+                            <th>Nome do Aluno</th>
+                            <th>Presente</th>
+                            <th>Observações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2024001</td>
+                            <td>João Silva Santos</td>
+                            <td><input type="checkbox" class="attendance-checkbox" checked></td>
+                            <td><input type="text" class="form-control" placeholder="Observações..."></td>
+                        </tr>
+                        <tr>
+                            <td>2024002</td>
+                            <td>Maria Oliveira Costa</td>
+                            <td><input type="checkbox" class="attendance-checkbox" checked></td>
+                            <td><input type="text" class="form-control" placeholder="Observações..."></td>
+                        </tr>
+                        <tr>
+                            <td>2024003</td>
+                            <td>Pedro Mendes Lima</td>
+                            <td><input type="checkbox" class="attendance-checkbox"></td>
+                            <td><input type="text" class="form-control" value="Faltou - justificativa médica"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <button class="btn" onclick="saveAttendance()">Salvar Frequência</button>
+            </div>
+
+            <!-- Materiais -->
+            <div id="materiais" class="page">
+                <h1 class="page-title">Materiais Didáticos</h1>
+                
+                <button class="btn" onclick="openUploadModal()" style="margin-bottom: 1rem;">+ Adicionar Material</button>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nome do Arquivo</th>
+                            <th>Disciplina</th>
+                            <th>Turma</th>
+                            <th>Data Upload</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Apostila_JavaScript.pdf</td>
+                            <td>Programação Web</td>
+                            <td>INFO 3A</td>
+                            <td>20/05/2024</td>
+                            <td>
+                                <button class="btn btn-success">Download</button>
+                                <button class="btn btn-danger">Excluir</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Exercicios_SQL.docx</td>
+                            <td>Banco de Dados</td>
+                            <td>INFO 2B</td>
+                            <td>18/05/2024</td>
+                            <td>
+                                <button class="btn btn-success">Download</button>
+                                <button class="btn btn-danger">Excluir</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Horários -->
+            <div id="horarios" class="page">
+                <h1 class="page-title">Meus Horários</h1>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Horário</th>
+                            <th>Segunda</th>
+                            <th>Terça</th>
+                            <th>Quarta</th>
+                            <th>Quinta</th>
+                            <th>Sexta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>08:00-09:40</td>
+                            <td>Prog Web<br>INFO 3A</td>
+                            <td>-</td>
+                            <td>Algoritmos<br>INFO 1A</td>
+                            <td>-</td>
+                            <td>Prog Web<br>INFO 3A</td>
+                        </tr>
+                        <tr>
+                            <td>10:00-11:40</td>
+                            <td>-</td>
+                            <td>Banco Dados<br>INFO 2B</td>
+                            <td>-</td>
+                            <td>Banco Dados<br>INFO 2B</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>14:00-15:40</td>
+                            <td>Algoritmos<br>INFO 1A</td>
+                            <td>-</td>
+                            <td>Prog Web<br>INFO 3A</td>
+                            <td>Algoritmos<br>INFO 1A</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para Upload de Material -->
+    <div id="uploadModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeUploadModal()">&times;</span>
+            <h2>Adicionar Material</h2>
+            
+            <div class="form-group">
+                <label>Arquivo:</label>
+                <input type="file" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label>Disciplina:</label>
+                <select class="form-control">
+                    <option>Programação Web</option>
+                    <option>Banco de Dados</option>
+                    <option>Algoritmos</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Turma:</label>
+                <select class="form-control">
+                    <option>INFO 3A</option>
+                    <option>INFO 2B</option>
+                    <option>INFO 1A</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Descrição:</label>
+                <textarea class="form-control" rows="3" placeholder="Descrição do material..."></textarea>
+            </div>
+            
+            <button class="btn" onclick="uploadMaterial()">Fazer Upload</button>
+        </div>
+    </div>
+
+    <script>
+        // Navegação entre páginas
+        function showPage(pageId) {
+            // Remove active class from all menu items and pages
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Add active class to clicked menu item and corresponding page
+            event.target.classList.add('active');
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // Função para carregar notas
+        function loadGrades() {
+            // Simulação de carregamento de notas
+            console.log('Carregando notas...');
+        }
+
+        // Função para salvar notas
+        function saveGrades() {
+            alert('Notas salvas com sucesso!');
+        }
+
+        // Função para salvar frequência
+        function saveAttendance() {
+            alert('Frequência salva com sucesso!');
+        }
+
+        // Modal functions
+        function openUploadModal() {
+            document.getElementById('uploadModal').style.display = 'block';
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').style.display = 'none';
+        }
+
+        function uploadMaterial() {
+            alert('Material enviado com sucesso!');
+            closeUploadModal();
+        }
+
+        // Fechar modal clicando fora dele
+        window.onclick = function(event) {
+            const modal = document.getElementById('uploadModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Simulação de dados dinâmicos
+        function updateStats() {
+            // Aqui você conectaria com uma API real
+            console.log('Atualizando estatísticas...');
+        }
+
+        // Atualizar stats a cada 5 minutos
+        setInterval(updateStats, 300000);
+
+        // Efeitos visuais para inputs de nota
+        document.addEventListener('DOMContentLoaded', function() {
+            const gradeInputs = document.querySelectorAll('.grade-input');
+            gradeInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const grade = parseFloat(this.value);
+                    const statusCell = this.closest('tr').querySelector('td:last-child span');
+                    
+                    if (grade >= 7) {
+                        statusCell.className = 'btn btn-success';
+                        statusCell.textContent = 'Aprovado';
+                    } else if (grade >= 5) {
+                        statusCell.className = 'btn btn-warning';
+                        statusCell.textContent = 'Recuperação';
+                    } else {
+                        statusCell.className = 'btn btn-danger';
+                        statusCell.textContent = 'Reprovado';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
