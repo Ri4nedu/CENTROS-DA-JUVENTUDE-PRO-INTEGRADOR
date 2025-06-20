@@ -1,0 +1,35 @@
+* {
+    padding: 0;
+    margin:0;
+}
+main{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    div{
+        margin-bottom: 8%;
+    }
+    header{
+        display: flex;
+        justify-content: space-between;
+        height: 8vh;
+        button{
+            width: 100%;
+        }
+    }
+    .conteudo{
+        background-color: rgb(216, 203, 203);
+        width: 70vw;
+        height: 30vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .entradas{
+            div{
+                display: flex;  
+            }
+        }
+    }
+    }
