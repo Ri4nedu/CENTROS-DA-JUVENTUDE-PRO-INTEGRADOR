@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cursos do CJU</title>
+  <style>
+    :root {
+      --verde-if: #1b5e20;
+      --verde-claro: #4caf50;
+      --cinza-claro: #f2f2f2;
+      --cinza-medio: #cccccc;
+      --texto: #333333;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--cinza-claro);
+      display: flex;
+      height: 100vh;
+    }
+
+
+    .main {
+      flex-grow: 1;
+      padding: 30px;
+      overflow-y: auto;
+      display: grid;
+    grid-template-columns: repeat(auto-fill , minmax(220px, 1fr));
+    }
+
+    .main h2 {
+      color: var(--verde-if);
+    }
+
+    .card {
+       
+      background-color: white;
+      border: 1px solid var(--cinza-medio);
+      border-left: 6px solid var(--verde-if);
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+      transition: box-shadow 0.2s;
+      width: 20vw;
+      height: 20vh;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .info {
+      font-size: 0.95rem;
+      color: var(--texto);
+    }
+
+    .info p {
+      margin: 4px 0;
+    }
+  </style>
+</head>
+<body>
+ 
+  <main class="main">
+    <h2>Cursos Abertos</h2>
+
+    <div class="card">
+      <h3>Oficina de Informática Básica</h3>
+      <div class="info">
+        <p><strong>Data:</strong> 10/07/2025 a 30/08/2025</p>
+        <p><strong>Horário:</strong> Segundas e Quartas - 14h às 16h</p>
+        <p><strong>Vagas:</strong> 20</p>
+        <p><strong>Oferecido por:</strong> CJU Coopagro</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Curso de Empreendedorismo Juvenil</h3>
+      <div class="info">
+        <p><strong>Data:</strong> 01/08/2025 a 25/09/2025</p>
+        <p><strong>Horário:</strong> Terças e Quintas - 15h às 17h</p>
+        <p><strong>Vagas:</strong> 15</p>
+        <p><strong>Oferecido por:</strong> CJU Europa</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Oficina de Robótica</h3>
+      <div class="info">
+        <p><strong>Data:</strong> 05/09/2025 a 20/10/2025</p>
+        <p><strong>Horário:</strong> Sábados - 9h às 11h30</p>
+        <p><strong>Vagas:</strong> 10</p>
+        <p><strong>Oferecido por:</strong> CJU Coopagro</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Educação Física e Dança</h3>
+      <div class="info">
+        <p><strong>Data:</strong> 12/07/2025 a 30/08/2025</p>
+        <p><strong>Horário:</strong> Segundas e Sextas - 16h às 17h30</p>
+        <p><strong>Vagas:</strong> 25</p>
+        <p><strong>Oferecido por:</strong> CJU Europa</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Curso de Mídia Digital</h3>
+      <div class="info">
+        <p><strong>Data:</strong> 15/08/2025 a 30/09/2025</p>
+        <p><strong>Horário:</strong> Quartas e Sextas - 14h às 16h</p>
+        <p><strong>Vagas:</strong> 18</p>
+        <p><strong>Oferecido por:</strong> CJU Coopagro</p>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

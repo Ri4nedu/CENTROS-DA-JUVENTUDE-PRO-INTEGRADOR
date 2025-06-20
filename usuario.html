@@ -3,132 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Perfil do Usuário - IF</title>
+  <title>Perfil do Usuário - CJU</title>
+  <link rel="stylesheet" href="styleuser.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Roboto', sans-serif;
-    }
-
-    body {
-      background-color: #f5f5f5;
-      color: #333;
-    }
-
-    header {
-      background-color: #00693e;
-      padding: 1rem 2rem;
-      color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    header h1 {
-      font-size: 1.5rem;
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 2rem auto;
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      padding: 2rem;
-    }
-
-    .profile-header {
-      display: flex;
-      gap: 2rem;
-      align-items: center;
-    }
-
-    .zoom-container {
-      position: relative;
-      overflow: hidden;
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      border: 3px solid #00693e;
-    }
-
-    .zoom-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.3s ease;
-    }
-
-    .zoom-container:hover img {
-      transform: scale(1.3);
-    }
-
-    .profile-info {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .profile-info h2 {
-      margin-bottom: 0.2rem;
-    }
-
-    .info-section {
-      margin-top: 2rem;
-    }
-
-    .info-section h3 {
-      color: #00693e;
-      margin-bottom: 1rem;
-      position: relative;
-    }
-
-    .info-section h3::after {
-      content: '';
-      display: block;
-      width: 60px;
-      height: 3px;
-      background-color: #00693e;
-      margin-top: 5px;
-    }
-
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1rem;
-    }
-
-    .info-card {
-      background-color: #ffffff;
-      border-left: 4px solid #00693e;
-      padding: 1rem 1rem;
-      border-radius: 6px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      transition: transform 0.2s ease;
-    }
-
-    .info-card:hover {
-      transform: translateY(-4px);
-    }
-
-    .info-card strong {
-      display: block;
-      font-weight: 600;
-      color: #00693e;
-      margin-bottom: 0.3rem;
-    }
-
-    .info-card span {
-      color: #444;
-    }
-  </style>
 </head>
 <body>
   <header>
-    <h1>SUAP - Sistema Unificado</h1>
+    <h1>CJU</h1>
     <span>Instituto Federal</span>
   </header>
 
@@ -165,5 +46,33 @@
       </div>
     </div>
   </div>
+     
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <h4 class="sidebar-title">📊 Painel Principal</h4>
+        <ul class="sidebar-menu">
+          <li><a href="index.html" class="active">Dashboard</a></li>
+          <li><a href="#">Notificações</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h4 class="sidebar-title">Projeto</h4>
+        <ul class="sidebar-menu">
+          <li><a href="#">Faltas</a></li>
+          <li><a href="#">Horário de Projeto</a></li>
+          <li><a href="#">Calendário de Eventos</a></li>
+          <li><a href="#">Conteudo</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h4 class="sidebar-title">📋 Serviços</h4>
+        <ul class="sidebar-menu">
+          <li><a href="#">Certificados</a></li>
+          <li><a href="#">Declarações</a></li>
+          <li><a href="#">Matrícula</a></li>
+          <li><a href="#">Biblioteca</a></li>
+        </ul>
+      </div>
+    </aside>
 </body>
 </html>

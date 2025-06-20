@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SUAP - Sistema Unificado de Administração Pública</title>
+    <title>SD</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,20 +12,19 @@
         <div class="header-top">
             <div class="container">
                 <div class="gov-info">
-                    <span>🇧🇷</span>
+                    <span>IF</span>
                     <span>INSTITUTO FEDERAL CR/BIOPARK</span>
                 </div>
                 <div class="accessibility-links">
-                    <a href="#">Alto Contraste</a>
-                    <a href="#">Mapa do Site</a>
-                    <a href="#">Acessibilidade</a>
+                    <a href="#">Sobre</a>
+                    <a href="#">Produção</a>
                 </div>
             </div>
         </div>
         <main class="header-main">
             <div class="container">
                 <div class="logo-section">
-                    <img src="imagens-homepage/LOGO - CJU.jpg" style="width: 80px; height: 70px;  border-radius: 4px; display: flex; align-items: center; justify-content: center;margin: 1%;"></img>
+                    <img src="imagens-homepage/LOGO - CJU.jpg" style="width: 85px; height: 85px;  border-radius: 4px; display: flex; align-items: center; justify-content: center;margin: 1%;"></img>
                     <div class="system-title">
                         <h1>SD</h1>
                         <p>Sistema Digital</p>
@@ -36,7 +35,8 @@
                         <h3>Nome:Bolsista</h3>
                         <p>Agente - Matrícula: 20241234567</p>
                     </div>
-                    <div class="user-avatar">JS</div>
+                
+                    <div class="user-avatar" >JS</div>
                 </div>
             </div>
         </div>
@@ -47,13 +47,13 @@
                         <a href="#" class="nav-link active" onclick="showSection('home')">Início</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link" onclick="showSection('academic')">2.P</a>
+                        <a href="#" class="nav-link" onclick="window.location.href='cursos.html'" style="cursor: pointer;">>Cursos</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link" onclick="showSection('financial')">3.P</a>
+                        <a href="#" class="nav-link" onclick="showSection('financial')">Biblioteca</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link" onclick="showSection('documents')">4.P</a>
+                        <a href="#" class="nav-link" onclick="showSection('documents')"></a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link" onclick="showSection('support')">5.P</a>
@@ -75,7 +75,6 @@
                 <h4 class="sidebar-title">📊 Painel Principal</h4>
                 <ul class="sidebar-menu">
                     <li><a href="#" class="active" onclick="showContent('dashboard')">Dashboard</a></li>
-                    <li><a href="#" onclick="showContent('profile')">Meu Perfil</a></li>
                     <li><a href="#" onclick="showContent('notifications')">Notificações</a></li>
                 </ul>
             </div>
@@ -112,98 +111,6 @@
             
             <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<style>
-    .dashboard-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 20px;
-        padding: 20px;
-    }
-
-    .dashboard-card {
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-        padding: 20px;
-    }
-
-    .card-header {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-    }
-
-    .card-icon {
-        font-size: 24px;
-        margin-right: 10px;
-    }
-
-    .card-title {
-        font-size: 18px;
-        font-weight: bold;
-    }
-
-    .card-description {
-        font-size: 14px;
-        color: #666;
-        margin-bottom: 15px;
-    }
-
-    .card-stats {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .stat-item {
-        text-align: center;
-        flex: 1;
-    }
-
-    .stat-number {
-        font-size: 20px;
-        font-weight: bold;
-    }
-
-    .stat-label {
-        font-size: 12px;
-        color: #888;
-    }
-
-    .card-charts {
-        text-align: center;
-        margin: 10px auto;
-    }
-
-    .report-upload {
-        margin-top: 20px;
-    }
-
-    .report-upload textarea {
-        width: 100%;
-        height: 100px;
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        resize: vertical;
-        font-size: 14px;
-    }
-
-    .report-upload button {
-        margin-top: 10px;
-        padding: 10px 20px;
-        background: #2196f3;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-    }
-
-    .report-upload button:hover {
-        background: #1976d2;
-    }
 </style>
 
 <div class="content-body" id="contentBody">
@@ -257,31 +164,36 @@
                     </div>
                 </div>
             </div>
+
+           
              <!-- Meu Perfil -->
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" onclick="showSection('usuario.html')">5.P</a>
-                    </li>
+             <div class="dashboard-card" onclick="window.location.href='usuario.html'" style="cursor: pointer;">
+                <!-- conteúdo igual ao anterior -->
+             
+              
+              
+                  <div class="card-header">
                     <div class="card-icon profile">👤</div>
                     <h3 class="card-title">Meu Perfil</h3>
+                  </div>
+                  <p class="card-description">Gerencie seus dados pessoais, contatos e configurações.</p>
+                  <div class="card-stats">
+                    <div class="stat-item">
+                      <div class="stat-number">95%</div>
+                      <div class="stat-label">Completo</div>
+                    </div>
+                    <div class="stat-item">
+                      <div class="stat-number">✓</div>
+                      <div class="stat-label">Verificado</div>
+                    </div>
+                    <div class="stat-item">
+                      <div class="stat-number">Ativo</div>
+                      <div class="stat-label">Status</div>
+                    </div>
+                  </div>
                 </div>
-                <p class="card-description">Gerencie seus dados pessoais, contatos e configurações.</p>
-                <div class="card-stats">
-                    <div class="stat-item">
-                        <div class="stat-number">95%</div>
-                        <div class="stat-label">Completo</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">✓</div>
-                        <div class="stat-label">Verificado</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">Ativo</div>
-                        <div class="stat-label">Status</div>
-                    </div>
-                </div>
-            </div>
+              </a>
+              
 
             <!-- Entrega de Relatório -->
             <div class="dashboard-card">
