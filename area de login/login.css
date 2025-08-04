@@ -1,34 +1,120 @@
 * {
-  padding: 0;
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-main {
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, #e0eafc, #cfdef3);
   height: 100vh;
-  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-main div {
-  margin-bottom: 8%;
+
+.login-container {
+  width: 90%;
+  max-width: 900px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
-main header {
+
+.login-box {
   display: flex;
-  justify-content: space-between;
-  height: 8vh;
+  flex-direction: column;
 }
-main header button {
+
+.login-header {
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid #eee;
+  background-color: #f7f7f7;
+}
+
+.tab {
+  flex: 1;
+  padding: 15px;
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.tab:hover,
+.tab.active {
+  background-color: #dfefff;
+  font-weight: bold;
+  color: #0056b3;
+  font-size: 1.5rem;
+}
+
+.login-content {
+  display: flex;
+  flex-direction: row;
+  padding: 30px;
+  gap: 30px;
+}
+
+.login-image img {
   width: 100%;
+  max-width: 300px;
+  border-radius: 8px;
+  object-fit: cover;
 }
-main .conteudo {
-  background-color: rgb(216, 203, 203);
-  width: 70vw;
-  height: 30vh;
+
+.login-form {
+  flex: 1;
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
 }
-main .conteudo .entradas div {
+
+.login-form form {
   display: flex;
-}/*# sourceMappingURL=login.css.map */
+  flex-direction: column;
+  gap: 15px;
+}
+
+.login-form h2 {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.login-form input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.login-form button {
+  padding: 12px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-form button:hover {
+  background-color: #357ab8;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .login-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .login-image img {
+    max-width: 100%;
+  }
+}
