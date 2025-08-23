@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Demandas de Compras</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f4f6f9;
+    }
+
+    header {
+      background-color: #1e293b;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .filters {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filters input, .filters select {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      margin: 5px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background-color: #f8fafc;
+    }
+
+    .status {
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    .pendente {
+      background-color: #fef08a;
+      color: #854d0e;
+    }
+
+    .andamento {
+      background-color: #bfdbfe;
+      color: #1e3a8a;
+    }
+
+    .concluido {
+      background-color: #bbf7d0;
+      color: #166534;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📊 Dashboard - Demandas de Compras</h1>
+  </header>
+
+  <div class="container">
+    <div class="filters">
+      <input type="text" id="searchInput" placeholder="🔍 Buscar por setor ou descrição...">
+      <select id="statusFilter">
+        <option value="all">Todos os Status</option>
+        <option value="pendente">Pendente</option>
+        <option value="andamento">Em Andamento</option>
+        <option value="concluido">Concluído</option>
+      </select>
+    </div>
+
+    <table id="demandasTable">
+      <thead>
+        <tr>
+          <th>Nº Pedido</th>
+          <th>Setor</th>
+          <th>Descrição</th>
+          <th>Status</th>
+          <th>Responsável</th>
+          <th>Prazo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>#001</td>
+          <td>TI</td>
+          <td>Compra de notebooks</td>
+          <td><span class="status pendente">Pendente</span></td>
+          <td>Ana</td>
+          <td>05/09/2025</td>
+        </tr>
+        <tr>
+          <td>#002</td>
+          <td>Marketing</td>
+          <td>Material gráfico</td>
+          <td><span class="status andamento">Em Andamento</span></td>
+          <td>João</td>
+          <td>10/09/2025</td>
+        </tr>
+        <tr>
+          <td>#003</td>
+          <td>RH</td>
+          <td>Cadeiras ergonômicas</td>
+          <td><span class="status concluido">Concluído</span></td>
+          <td>Mariana</td>
+          <td>01/09/2025</td>
+        </tr>
+        <tr>
+          <td>#004</td>
+          <td>Financeiro</td>
+          <td>Software de gestão</td>
+          <td><span class="status pendente">Pendente</span></td>
+          <td>Carlos</td>
+          <td>15/09/2025</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const searchInput = document.getElementById("searchInput");
+    const statusFilter = document.getElementById("statusFilter");
+    const table = document.getElementById("demandasTable").getElementsByTagName("tbody")[0];
+
+    function filterTable() {
+      const searchText = searchInput.value.toLowerCase();
+      const statusValue = statusFilter.value;
+
+      for (let row of table.rows) {
+        const setor = row.cells[1].textContent.toLowerCase();
+        const descricao = row.cells[2].textContent.toLowerCase();
+        const status = row.cells[3].textContent.toLowerCase();
+
+        const matchesSearch = setor.includes(searchText) || descricao.includes(searchText);
+        const matchesStatus = statusValue === "all" || status.includes(statusValue);
+
+        row.style.display = matchesSearch && matchesStatus ? "" : "none";
+      }
+    }
+
+    searchInput.addEventListener("keyup", filterTable);
+    statusFilter.addEventListener("change", filterTable);
+  </script>
+</body>
+</html>

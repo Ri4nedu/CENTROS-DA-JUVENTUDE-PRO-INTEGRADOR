@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calendário</title>
+  <style>
+    :root {
+      --bg: #0b0c10;
+      --card: #12141a;
+      --text: #e8e8ea;
+      --muted: #9aa0a6;
+      --accent: #6ee7b7;
+      --accent-2: #60a5fa;
+      --border: #23262d;
+      --danger: #ef4444;
+      --today: #f59e0b;
+      --shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .light {
+      --bg: #f7f8fa;
+      --card: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --accent: #10b981;
+      --accent-2: #2563eb;
+      --border: #e5e7eb;
+      --danger: #ef4444;
+      --today: #d97706;
+      --shadow: 0 10px 20px rgba(17,24,39,.08);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font: 500 16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: var(--bg);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .app {
+      width: min(1100px, 100%);
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1.3fr .7fr;
+    }
+    @media (max-width: 900px) {
+      .app { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    /* Header */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; margin-bottom: 12px;
+    }
+    .title {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .title h1 { font-size: 20px; margin: 0; }
+    .controls { display: flex; align-items: center; gap: 8px; }
+    .btn {
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      padding: 8px 12px; border-radius: 12px;
+      cursor: pointer;
+    }
+    .btn:hover { border-color: var(--accent); }
+    .btn.primary { background: var(--accent-2); color: white; border-color: transparent; }
+
+    .toggle {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 14px; color: var(--muted);
+      user-select: none;
+    }
+
+    /* Calendar grid */
+    .calendar {
+      display: grid; gap: 8px;
+      grid-template-rows: auto 1fr;
+      height: 100%;
+    }
+
+    .weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+    .weekdays div { text-align: center; color: var(--muted); font-size: 12px; padding: 6px 0; }
+
+    .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+    .day {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      min-height: 110px;
+      padding: 10px;
+      position: relative;
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card), transparent 0%), color-mix(in oklab, var(--card), black 6%));
+      transition: transform .08s ease;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .day:hover { transform: translateY(-1px); }
+    .day.muted { opacity: .6; }
+    .day .n {
+      font-weight: 700; font-size: 14px; color: var(--muted);
+    }
+    .day.today { outline: 2px dashed var(--today); outline-offset: 2px; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip {
+      font-size: 12px; padding: 4px 8px; border-radius: 999px;
+      border: 1px solid var(--border); color: var(--text);
+      background: color-mix(in oklab, var(--accent-2), transparent 84%);
+      max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+
+    /* Sidebar */
+    .sidebar h2 { margin: 0 0 8px 0; font-size: 18px; }
+    .sidebar .date { color: var(--muted); margin-bottom: 8px; }
+    .field { display: grid; gap: 6px; margin-bottom: 10px; }
+    input[type="text"], input[type="time"], textarea, select {
+      width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border);
+      background: transparent; color: var(--text); font: inherit;
+    }
+    textarea { resize: vertical; min-height: 72px; }
+
+    .event-item {
+      display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center;
+      border: 1px solid var(--border); padding: 10px; border-radius: 12px;
+    }
+    .event-item .meta { font-size: 13px; color: var(--muted); }
+    .event-item .title { font-weight: 700; }
+    .danger { color: var(--danger); }
+
+    .empty { color: var(--muted); font-size: 14px; text-align: center; padding: 10px 0; }
+
+    .legend { display: flex; gap: 12px; align-items: center; color: var(--muted); font-size: 12px; }
+    .legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent-2); display: inline-block; }
+
+    /* Footer */
+    .footer { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; color: var(--muted); font-size: 12px; }
+    .link { color: var(--accent-2); text-decoration: none; }
+  </style>
+</head>
+<body class="light" id="body">
+  <div class="app">
+    <section class="card">
+      <div class="topbar">
+        <div class="title">
+          <button class="btn" id="prevBtn" aria-label="Mês anterior">‹</button>
+          <h1 id="monthLabel">Março 2025</h1>
+          <button class="btn" id="nextBtn" aria-label="Próximo mês">›</button>
+          <button class="btn" id="todayBtn">Hoje</button>
+        </div>
+        <div class="controls">
+          <select class="btn" id="monthSelect" aria-label="Selecionar mês"></select>
+          <select class="btn" id="yearSelect" aria-label="Selecionar ano"></select>
+          <label class="toggle">
+            <input type="checkbox" id="modeToggle" /> Modo escuro
+          </label>
+        </div>
+      </div>
+
+      <div class="calendar">
+        <div class="weekdays" aria-hidden="true">
+          <div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div><div>Dom</div>
+        </div>
+        <div class="grid" id="grid" role="grid" aria-label="Calendário"></div>
+        <div class="footer">
+          <div class="legend"><span><i class="dot"></i> tem evento</span></div>
+          <a class="link" href="#" id="exportBtn">Exportar eventos (.json)</a>
+        </div>
+      </div>
+    </section>
+
+    <aside class="card sidebar" aria-live="polite">
+      <h2 id="sideTitle">Adicionar evento</h2>
+      <div class="date" id="sideDate">Selecione um dia no calendário</div>
+      <form id="eventForm">
+        <div class="field">
+          <label for="evtTitle">Título</label>
+          <input type="text" id="evtTitle" placeholder="Ex.: Reunião do projeto" required />
+        </div>
+        <div class="field" style="display:grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div>
+            <label for="evtTime">Hora</label>
+            <input type="time" id="evtTime" />
+          </div>
+          <div>
+            <label for="evtType">Tipo</label>
+            <select id="evtType">
+              <option value="pessoal">Pessoal</option>
+              <option value="trabalho">Trabalho</option>
+              <option value="estudos">Estudos</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="evtDesc">Descrição</label>
+          <textarea id="evtDesc" placeholder="Detalhes (opcional)"></textarea>
+        </div>
+        <div class="controls">
+          <button class="btn primary" type="submit">Salvar</button>
+          <button class="btn" type="reset">Limpar</button>
+          <button class="btn" id="deleteDayBtn" type="button">Excluir todos do dia</button>
+        </div>
+      </form>
+
+      <h2 style="margin-top:16px">Eventos do dia</h2>
+      <div id="eventList" class="list"></div>
+    </aside>
+  </div>
+
+  <script>
+    // Utilidades de data
+    const PT = new Intl.DateTimeFormat('pt-BR', { month: 'long', year: 'numeric' });
+    const PT_MONTH = new Intl.DateTimeFormat('pt-BR', { month: 'long' });
+    const PT_DAY = new Intl.DateTimeFormat('pt-BR', { day: '2-digit' });
+
+    const state = {
+      view: new Date(), // mês/ano em exibição
+      selected: null,   // Date do dia selecionado
+      events: loadEvents(), // { 'YYYY-MM-DD': [ {title, time, type, desc} ] }
+    };
+
+    function ymd(d){
+      return d.toISOString().slice(0,10);
+    }
+
+    function makeDate(y,m,d){ // m 0-11
+      const dt = new Date(Date.UTC(y,m,d));
+      // converter para local sem quebrar o ISO
+      return new Date(dt.getUTCFullYear(), dt.getUTCMonth(), dt.getUTCDate());
+    }
+
+    function startOfMonth(d){ return new Date(d.getFullYear(), d.getMonth(), 1); }
+    function endOfMonth(d){ return new Date(d.getFullYear(), d.getMonth()+1, 0); }
+
+    // Calcula matriz de 6 semanas começando na segunda
+    function buildMatrix(base){
+      const first = startOfMonth(base);
+      let startIdx = first.getDay(); // 0=Dom .. 6=Sáb
+      // Queremos segunda=0 ... domingo=6
+      startIdx = (startIdx + 6) % 7;
+      const start = new Date(first);
+      start.setDate(first.getDate() - startIdx);
+      const weeks = [];
+      for(let w=0; w<6; w++){
+        const row = [];
+        for(let i=0;i<7;i++){
+          const d = new Date(start); d.setDate(start.getDate() + (w*7+i));
+          row.push(d);
+        }
+        weeks.push(row);
+      }
+      return weeks;
+    }
+
+    // Renderização do calendário
+    const grid = document.getElementById('grid');
+    const monthLabel = document.getElementById('monthLabel');
+    const monthSelect = document.getElementById('monthSelect');
+    const yearSelect = document.getElementById('yearSelect');
+
+    function renderHeader(){
+      const label = PT.format(state.view);
+      monthLabel.textContent = label.charAt(0).toUpperCase()+label.slice(1);
+
+      // selects
+      monthSelect.innerHTML = '';
+      for(let m=0;m<12;m++){
+        const opt = document.createElement('option');
+        opt.value = m;
+        opt.textContent = capitalize(PT_MONTH.format(makeDate(2024,m,1)));
+        if(m===state.view.getMonth()) opt.selected = true;
+        monthSelect.appendChild(opt);
+      }
+      yearSelect.innerHTML = '';
+      const y = state.view.getFullYear();
+      for(let yr=y-5; yr<=y+5; yr++){
+        const opt = document.createElement('option');
+        opt.value = yr;
+        opt.textContent = yr;
+        if(yr===y) opt.selected = true;
+        yearSelect.appendChild(opt);
+      }
+    }
+
+    function renderCalendar(){
+      renderHeader();
+      const weeks = buildMatrix(state.view);
+      grid.innerHTML = '';
+      const today = new Date();
+      weeks.flat().forEach(d => {
+        const cell = document.createElement('button');
+        cell.className = 'day btn-reset';
+        cell.type = 'button';
+        cell.setAttribute('role','gridcell');
+        const inMonth = d.getMonth() === state.view.getMonth();
+        if(!inMonth) cell.classList.add('muted');
+        if(sameDate(d, today)) cell.classList.add('today');
+        if(state.events[ymd(d)]){
+          cell.dataset.hasEvent = '1';
+        }
+        cell.innerHTML = `
+          <div class="n" aria-hidden="true">${d.getDate()}</div>
+          <div class="chips">${(state.events[ymd(d)]||[]).slice(0,3).map(e=>`<span class="chip" title="${escapeHtml(e.title)}">${escapeHtml(e.title)}</span>`).join('')}</div>
+        `;
+        cell.addEventListener('click', ()=> selectDay(d));
+        if(cell.dataset.hasEvent === '1'){
+          cell.style.boxShadow = 'inset 0 0 0 2px var(--accent-2)';
+        }
+        grid.appendChild(cell);
+      });
+    }
+
+    function sameDate(a,b){ return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate(); }
+    function capitalize(s){ return s[0].toUpperCase()+s.slice(1); }
+    function escapeHtml(str){ return str.replace(/[&<>"]/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[m])); }
+
+    // Sidebar e eventos
+    const sideTitle = document.getElementById('sideTitle');
+    const sideDate = document.getElementById('sideDate');
+    const eventForm = document.getElementById('eventForm');
+    const evtTitle = document.getElementById('evtTitle');
+    const evtTime = document.getElementById('evtTime');
+    const evtType = document.getElementById('evtType');
+    const evtDesc = document.getElementById('evtDesc');
+    const eventList = document.getElementById('eventList');
+    const deleteDayBtn = document.getElementById('deleteDayBtn');
+
+    function selectDay(d){
+      state.selected = new Date(d);
+      const label = state.selected.toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long', year:'numeric' });
+      sideTitle.textContent = 'Adicionar evento';
+      sideDate.textContent = capitalize(label);
+      renderEvents();
+      // Foco no título para já digitar
+      evtTitle.focus();
+    }
+
+    function renderEvents(){
+      const key = state.selected ? ymd(state.selected) : null;
+      const list = key ? (state.events[key] || []) : [];
+      eventList.innerHTML = '';
+      if(!key){
+        eventList.innerHTML = '<p class="empty">Nenhum dia selecionado.</p>';
+        return;
+      }
+      if(list.length === 0){
+        eventList.innerHTML = '<p class="empty">Sem eventos neste dia.</p>';
+        return;
+      }
+      list
+        .slice()
+        .sort((a,b)=> (a.time||'').localeCompare(b.time||''))
+        .forEach((e, idx)=>{
+          const item = document.createElement('div');
+          item.className = 'event-item';
+          item.innerHTML = `
+            <div>
+              <div class="title">${escapeHtml(e.title)}</div>
+              <div class="meta">${e.time ? e.time + ' · ' : ''}${escapeHtml(e.type)}${e.desc ? ' · '+escapeHtml(e.desc) : ''}</div>
+            </div>
+            <button class="btn" aria-label="Excluir evento">🗑</button>
+          `;
+          item.querySelector('button').addEventListener('click', ()=>{
+            const arr = state.events[key] || [];
+            arr.splice(idx,1);
+            if(arr.length===0) delete state.events[key];
+            saveEvents();
+            renderEvents();
+            renderCalendar();
+          });
+          eventList.appendChild(item);
+        });
+    }
+
+    eventForm.addEventListener('submit', (ev)=>{
+      ev.preventDefault();
+      if(!state.selected){ alert('Selecione um dia no calendário.'); return; }
+      const key = ymd(state.selected);
+      const entry = {
+        title: evtTitle.value.trim(),
+        time: evtTime.value || '',
+        type: evtType.value,
+        desc: evtDesc.value.trim()
+      };
+      if(!entry.title){ evtTitle.focus(); return; }
+      state.events[key] = state.events[key] || [];
+      state.events[key].push(entry);
+      saveEvents();
+      eventForm.reset();
+      renderEvents();
+      renderCalendar();
+    });
+
+    deleteDayBtn.addEventListener('click', ()=>{
+      if(!state.selected) return;
+      const key = ymd(state.selected);
+      if(state.events[key] && confirm('Excluir TODOS os eventos deste dia?')){
+        delete state.events[key];
+        saveEvents();
+        renderEvents();
+        renderCalendar();
+      }
+    });
+
+    // Persistência
+    function loadEvents(){
+      try{ return JSON.parse(localStorage.getItem('calendar.events')||'{}'); }
+      catch{ return {}; }
+    }
+    function saveEvents(){
+      localStorage.setItem('calendar.events', JSON.stringify(state.events));
+    }
+
+    // Navegação
+    document.getElementById('prevBtn').addEventListener('click', ()=>{ state.view.setMonth(state.view.getMonth()-1); renderCalendar(); });
+    document.getElementById('nextBtn').addEventListener('click', ()=>{ state.view.setMonth(state.view.getMonth()+1); renderCalendar(); });
+    document.getElementById('todayBtn').addEventListener('click', ()=>{ state.view = new Date(); renderCalendar(); selectDay(new Date()); });
+
+    monthSelect.addEventListener('change', ()=>{ state.view.setMonth(+monthSelect.value); renderCalendar(); });
+    yearSelect.addEventListener('change', ()=>{ state.view.setFullYear(+yearSelect.value); renderCalendar(); });
+
+    // Exportação
+    document.getElementById('exportBtn').addEventListener('click', (e)=>{
+      e.preventDefault();
+      const blob = new Blob([JSON.stringify(state.events, null, 2)], {type:'application/json'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'eventos-calendario.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+
+    // Tema (claro/escuro)
+    const body = document.getElementById('body');
+    const modeToggle = document.getElementById('modeToggle');
+    const savedTheme = localStorage.getItem('calendar.theme');
+    if(savedTheme === 'dark'){ body.classList.remove('light'); modeToggle.checked = true; }
+    modeToggle.addEventListener('change', ()=>{
+      if(modeToggle.checked){ body.classList.remove('light'); localStorage.setItem('calendar.theme','dark'); }
+      else { body.classList.add('light'); localStorage.setItem('calendar.theme','light'); }
+    });
+
+    // Inicialização
+    function init(){
+      const now = new Date();
+      state.view = new Date(now.getFullYear(), now.getMonth(), 1);
+      renderCalendar();
+      // Seleciona hoje por padrão
+      selectDay(now);
+    }
+    init();
+  </script>
+</body>
+</html>
