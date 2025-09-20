@@ -28,10 +28,6 @@
     box-sizing: border-box;
 }
 
-html, body {
-    height: 100%;
-}
-
 body {
     margin: 0;
     font: 500 16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
@@ -41,7 +37,77 @@ body {
     place-items: center;
     padding: 24px;
 }
-
+/* Botão hamburguer */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 26px;
+    cursor: pointer;
+  }
+  
+  /* Drawer */
+  .drawer {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 260px;
+    height: 100%;
+    background: var(--card);
+    color: var(--text);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    transition: left 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .drawer.active {
+    left: 0;
+  }
+  
+  .drawer-close {
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 24px;
+    align-self: flex-end;
+    cursor: pointer;
+  }
+  
+  .drawer-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .drawer-menu li {
+    margin-bottom: 12px;
+  }
+  
+  .drawer-menu a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 16px;
+  }
+  
+  .drawer-menu a:hover {
+    color: var(--accent);
+  }
+  
+  /* Responsividade */
+  @media (max-width: 900px) {
+    .navigation {
+      display: none; /* esconde menu desktop */
+    }
+    .menu-toggle {
+      display: block; /* mostra hamburguer */
+    }
+  }
+  
 .app {
     width: min(1100px, 100%);
     display: grid;

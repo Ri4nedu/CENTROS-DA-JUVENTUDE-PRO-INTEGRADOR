@@ -1,67 +1,393 @@
-<!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="header.css">
-    <title>Document</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sistema de Gerenciamento - MicroEmpresas (Front-end)</title>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root{
+      --bg:#f4f6fb; --card:#ffffff; --primary:#2c6fbf; --muted:#6b7280; --accent:#16a34a;
+      --glass: rgba(255,255,255,0.6);
+      --radius:12px; --gap:16px; --maxw:1200px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:#0f172a;line-height:1.35;padding:24px;display:flex;justify-content:center}
+    .app{width:100%;max-width:var(--maxw);}
+
+    /* Header */
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--primary),#145398);display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
+    h1{font-size:18px;margin:0}
+    .sub{color:var(--muted);font-size:13px}
+
+    /* Layout */
+    .layout{display:grid;grid-template-columns:260px 1fr;gap:var(--gap)}
+    nav{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 6px 18px rgba(16,24,40,0.06)}
+    nav h3{margin:0 0 12px 0;font-size:14px}
+    nav ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+    nav a{display:block;padding:8px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:14px}
+    nav a.active, nav a:hover{background:linear-gradient(90deg,rgba(44,111,191,0.08),rgba(22,163,74,0.04));color:var(--primary)}
+
+    main{padding:14px;background:transparent}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
+    .card{background:var(--card);padding:12px;border-radius:12px;box-shadow:0 6px 18px rgba(16,24,40,0.04)}
+    .card h4{margin:0 0 10px 0;font-size:14px}
+    .metric{font-size:20px;font-weight:700}
+    .small{font-size:13px;color:var(--muted)}
+
+    /* Charts & tables */
+    .wide{grid-column:span 2}
+    canvas{width:100%!important;height:220px!important}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;text-align:left;border-bottom:1px solid #eef2f7;font-size:13px}
+    .actions button{margin-right:6px}
+
+    /* responsive */
+    @media (max-width:920px){.layout{grid-template-columns:1fr} .grid{grid-template-columns:1fr 1fr}.wide{grid-column:auto}}
+    @media (max-width:640px){.grid{grid-template-columns:1fr} nav{display:none}}
+
+    /* small form */
+    .form-row{display:flex;gap:8px}
+    input,select,textarea{padding:8px;border-radius:8px;border:1px solid #e6eef8;font-size:13px;width:100%}
+    .btn{background:var(--primary);color:white;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+    .btn.ghost{background:transparent;color:var(--primary);border:1px solid rgba(44,111,191,0.12)}
+
+    footer{margin-top:14px;color:var(--muted);font-size:13px}
+
+    /* small helper */
+    .list{display:flex;gap:8px;flex-direction:column}
+    .pill{background:#eef6ff;padding:6px 8px;border-radius:999px;font-size:12px;color:var(--primary)}
+  </style>
 </head>
 <body>
-        <!-- Header -->
-    <header class="header">
-        <div class="header-top">
-            <div class="container">
-                <div class="gov-info">
-                    <span>IF</span>
-                    <span>INSTITUTO FEDERAL CR/BIOPARK</span>
-                </div>
-                <div class="accessibility-links">
-                    <a href="#">Sobre</a>
-                    <a href="#">Produção</a>
-                </div>
-            </div>
+  <div class="app" id="app">
+    <header>
+      <div class="brand">
+        <div class="logo">ME</div>
+        <div>
+          <h1>Sistema de Gerenciamento - MicroEmpresas</h1>
+          <div class="sub">Projeto Integrador II — Lorenzo Zottis • Mateus Rosler • Rian Eduardo</div>
         </div>
-        <main class="header-main">
-            <div class="container">
-                <div class="logo-section">
-                    <img src="" alt="Imagem logo" style="width: 85px; height: 85px;  border-radius: 4px; display: flex; align-items: center; justify-content: center;margin: 1%;;"></img>
-                    <div class="system-title">
-                        <h1>SD</h1>
-                        <p>Sistema Digital</p>
-                    </div>
-                </div>
-                <div class="user-info">
-                    <div class="user-details">
-                        <h3>Nome:Bolsista</h3>
-                        <p>Agente - Matrícula: 20241234567</p>
-                    </div>
-                
-                    <div class="user-avatar" >JS</div>
-                </div>
-            </div>
-        </div>
-        <nav class="navigation">
-            <div class="nav-container">
-                <ul class="nav-menu">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link active" onclick="showSection('home')">Principal</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/AreadeTrabalho/Serviços/comp.html" class="nav-link">Serviços</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/AreadeTrabalho/Quadro de Funcionarios/quadro.html" class="nav-link" onclick="showSection('financial')">Funcionarios</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/AreadeTrabalho/Calendario/cal.html" class="nav-link" onclick="showSection('documents')">Calendário</a>
-                    </li>
-                </ul>
-                <div class="nav-search">
-                    <input type="text" class="search-input" placeholder="Buscar no sistema...">
-                    <button class="search-btn">🔍</button>
-                </div>
-            </div>
-        </nav>
+      </div>
+      <div>
+        <button class="btn" id="addEmployeeBtn">+ Funcionário</button>
+      </div>
     </header>
+
+    <div class="layout">
+      <nav>
+        <h3>Menu</h3>
+        <ul>
+          <li><a href="#" class="active" data-section="dashboard">Dashboard</a></li>
+          <li><a href="#" data-section="funcionarios">Funcionários</a></li>
+          <li><a href="#" data-section="cronograma">Cronograma</a></li>
+          <li><a href="#" data-section="requisicoes">Requisições</a></li>
+          <li><a href="#" data-section="financeiro">Financeiro</a></li>
+        </ul>
+      </nav>
+
+      <main>
+        <!-- Dashboard -->
+        <section id="dashboard" class="section">
+          <div class="grid">
+            <div class="card">
+              <h4>Presenças (hoje)</h4>
+              <div style="display:flex;align-items:center;gap:12px">
+                <canvas id="presencaChart"></canvas>
+                <div>
+                  <div class="metric" id="presentCount">--</div>
+                  <div class="small">Presentes / Ausentes</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h4>Funcionários</h4>
+              <div class="metric" id="totalEmployees">--</div>
+              <div class="small">Total de colaboradores cadastrados</div>
+            </div>
+
+            <div class="card">
+              <h4>Requisições Abertas</h4>
+              <div class="metric" id="openRequests">--</div>
+              <div class="small">Solicitações pendentes</div>
+            </div>
+
+            <div class="card wide">
+              <h4>Monitoramento de Lucros (últimos 6 meses)</h4>
+              <canvas id="profitChart"></canvas>
+            </div>
+
+            <div class="card">
+              <h4>Atividades próximas</h4>
+              <div id="nextActivities" class="list"></div>
+            </div>
+
+            <div class="card">
+              <h4>Últimas requisições</h4>
+              <div id="recentRequests" class="list"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Funcionários -->
+        <section id="funcionarios" class="section" style="display:none">
+          <div class="card">
+            <h4>Cadastro e Gerência de Funcionários</h4>
+            <div style="margin-top:10px;margin-bottom:10px;display:flex;gap:8px;align-items:center">
+              <input id="searchEmployee" placeholder="Pesquisar por nome ou cargo" />
+              <button class="btn" id="refreshEmployees">Atualizar</button>
+            </div>
+
+            <table id="employeesTable">
+              <thead>
+                <tr><th>Nome</th><th>Cargo</th><th>Salário</th><th>Ações</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Cronograma -->
+        <section id="cronograma" class="section" style="display:none">
+          <div class="grid">
+            <div class="card wide">
+              <h4>Cronograma de Atividades</h4>
+              <div id="scheduleList" class="list" style="margin-top:10px"></div>
+              <div style="margin-top:10px;display:flex;gap:8px">
+                <input id="activityText" placeholder="Nova atividade (descrição)" />
+                <input id="activityDate" type="date" />
+                <button class="btn" id="addActivityBtn">Adicionar</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Requisições -->
+        <section id="requisicoes" class="section" style="display:none">
+          <div class="card">
+            <h4>Controle de Requisições</h4>
+            <div style="margin-top:8px;display:flex;gap:8px">
+              <input id="requestText" placeholder="Descrição da requisição" />
+              <select id="requestType"><option>Material</option><option>Serviço</option><option>Outros</option></select>
+              <button class="btn" id="addRequestBtn">Enviar</button>
+            </div>
+            <div style="margin-top:12px">
+              <ul id="requestsList" style="padding-left:16px"></ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Financeiro -->
+        <section id="financeiro" class="section" style="display:none">
+          <div class="grid">
+            <div class="card wide">
+              <h4>Visão Financeira</h4>
+              <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+                <input id="revenueMonth" placeholder="Receita do mês (R$)" type="number" />
+                <input id="expenseMonth" placeholder="Despesas do mês (R$)" type="number" />
+                <button class="btn" id="addFinanceBtn">Registrar</button>
+              </div>
+              <div id="financeLog" class="list"></div>
+            </div>
+          </div>
+        </section>
+
+        <footer>Arquivo front-end estático — abra este HTML no navegador. Dados persistem localmente (localStorage).</footer>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal (simples) -->
+  <div id="modal" style="position:fixed;inset:0;background:rgba(2,6,23,0.5);display:none;align-items:center;justify-content:center;padding:20px">
+    <div style="width:100%;max-width:520px;background:var(--card);padding:18px;border-radius:12px">
+      <h3 id="modalTitle">Novo Funcionário</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+        <input id="empName" placeholder="Nome" />
+        <input id="empRole" placeholder="Cargo" />
+        <input id="empSalary" placeholder="Salário (R$)" type="number" />
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:6px">
+          <button class="btn ghost" id="closeModal">Cancelar</button>
+          <button class="btn" id="saveEmployee">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== Dados iniciais (mock) =====
+    const STORAGE_KEYS = {EMP:'me_employees', REQ:'me_requests', ACT:'me_activities', FIN:'me_finance'};
+    const sampleEmployees = [
+      {id:1,name:'Ana Souza',role:'Gerente',salary:3200,present:true},
+      {id:2,name:'João Silva',role:'Atendente',salary:1800,present:false},
+      {id:3,name:'Lucas Lima',role:'Auxiliar',salary:1500,present:true}
+    ];
+
+    // util
+    const $ = (sel,root=document)=>root.querySelector(sel);
+
+    function load(key, fallback){try{const s=localStorage.getItem(key);return s?JSON.parse(s):fallback}catch(e){return fallback}}
+    function save(key,val){localStorage.setItem(key,JSON.stringify(val))}
+
+    // inicializar dados se vazio
+    if(!localStorage.getItem(STORAGE_KEYS.EMP)) save(STORAGE_KEYS.EMP, sampleEmployees);
+    if(!localStorage.getItem(STORAGE_KEYS.REQ)) save(STORAGE_KEYS.REQ, [{id:1,text:'Compra de papel',type:'Material',status:'aberto'}]);
+    if(!localStorage.getItem(STORAGE_KEYS.ACT)) save(STORAGE_KEYS.ACT, [{id:1,text:'Reunião mensal',date: new Date().toISOString().slice(0,10)}]);
+    if(!localStorage.getItem(STORAGE_KEYS.FIN)) save(STORAGE_KEYS.FIN, []);
+
+    // ===== Charts =====
+    let presencaChart, profitChart;
+    function buildCharts(){
+      const employees = load(STORAGE_KEYS.EMP,[]);
+      const present = employees.filter(e=>e.present).length;
+      const absent = employees.length - present;
+      const ctx = document.getElementById('presencaChart').getContext('2d');
+      if(presencaChart) presencaChart.destroy();
+      presencaChart = new Chart(ctx,{
+        type:'doughnut',data:{labels:['Presentes','Ausentes'],datasets:[{data:[present,absent],backgroundColor:['#16a34a','#ef4444']}]} ,options:{plugins:{legend:{position:'bottom'}}}
+      });
+
+      // profit example (últimos 6 meses)
+      const months = [];
+      for(let i=5;i>=0;i--){const d=new Date();d.setMonth(d.getMonth()-i);months.push(d.toLocaleString('pt-BR',{month:'short',year:'2-digit'}))}
+      const finances = load(STORAGE_KEYS.FIN,[]);
+      // Agrega receita - despesa por mês (mock se vazio)
+      const data = months.map(m=>{
+        // procurar valor no storage
+        const found = finances.find(f=>f.month===m);
+        if(found) return found.revenue - found.expense;
+        // criar mock pequeno
+        return Math.round((Math.random()*5000)-1500);
+      });
+      const pctx = document.getElementById('profitChart').getContext('2d');
+      if(profitChart) profitChart.destroy();
+      profitChart = new Chart(pctx,{type:'line',data:{labels:months,datasets:[{label:'Lucro (R$)',data:data,fill:true,tension:0.3}]},options:{plugins:{legend:{display:false}}}});
+
+      // atualizar pequenos indicadores
+      $('#presentCount').textContent = `${present} / ${absent}`;
+      $('#totalEmployees').textContent = employees.length;
+      $('#openRequests').textContent = load(STORAGE_KEYS.REQ,[]).filter(r=>r.status==='aberto').length;
+    }
+
+    // ===== Render UI =====
+    function renderEmployees(filter=''){
+      const t = $('#employeesTable tbody'); t.innerHTML='';
+      const employees = load(STORAGE_KEYS.EMP,[]).filter(e=> (e.name+e.role).toLowerCase().includes(filter.toLowerCase()));
+      employees.forEach(e=>{
+        const tr=document.createElement('tr');
+        tr.innerHTML = `<td>${e.name}</td><td>${e.role}</td><td>R$ ${Number(e.salary).toFixed(2)}</td><td class='actions'>
+          <button class='btn ghost' data-id='${e.id}' data-act='toggle'>${e.present? 'Marcar Ausente':'Marcar Presente'}</button>
+          <button class='btn' data-id='${e.id}' data-act='delete'>Remover</button></td>`;
+        t.appendChild(tr);
+      });
+    }
+
+    function renderActivities(){
+      const el = $('#scheduleList'); el.innerHTML='';
+      const acts = load(STORAGE_KEYS.ACT,[]).sort((a,b)=>a.date.localeCompare(b.date));
+      acts.forEach(a=>{
+        const div = document.createElement('div'); div.innerHTML = `<strong>${a.date}</strong> — ${a.text}`; el.appendChild(div);
+      });
+      // próximas
+      $('#nextActivities').innerHTML = acts.slice(0,3).map(a=>`<div><strong>${a.date}</strong><div class='small'>${a.text}</div></div>`).join('') || '<div class="small">Nenhuma atividade</div>';
+    }
+
+    function renderRequests(){
+      const list = $('#requestsList'); list.innerHTML='';
+      const recent = $('#recentRequests'); recent.innerHTML='';
+      const reqs = load(STORAGE_KEYS.REQ,[]).slice().reverse();
+      reqs.forEach(r=>{
+        const li=document.createElement('li');
+        li.innerHTML = `${r.text} <small class='small'>(${r.type})</small> — <em>${r.status}</em> <button class='btn ghost' data-id='${r.id}' data-act='close'>Fechar</button>`;
+        list.appendChild(li);
+      });
+      recent.innerHTML = reqs.slice(0,3).map(r=>`<div>${r.text} <div class='small'>${r.type} — ${r.status}</div></div>`).join('') || '<div class="small">Nenhuma requisição</div>';
+    }
+
+    function renderFinanceLog(){
+      const container = $('#financeLog'); container.innerHTML='';
+      const fin = load(STORAGE_KEYS.FIN,[]).slice().reverse();
+      if(!fin.length) container.innerHTML='<div class="small">Nenhum registro financeiro</div>';
+      fin.forEach(f=>{
+        const d = document.createElement('div'); d.innerHTML = `<strong>${f.month}</strong> — Receita R$ ${Number(f.revenue).toFixed(2)} — Despesa R$ ${Number(f.expense).toFixed(2)} <div class='small'>Lucro R$ ${Number(f.revenue - f.expense).toFixed(2)}</div>`; container.appendChild(d);
+      });
+    }
+
+    // eventos
+    document.addEventListener('click', (e)=>{
+      const btn = e.target.closest('button');
+      if(!btn) return;
+      if(btn.id==='addEmployeeBtn'){ openModal(); }
+      if(btn.id==='closeModal'){ closeModal(); }
+      if(btn.id==='saveEmployee'){ saveEmployee(); }
+      if(btn.dataset && btn.dataset.act==='toggle'){ const id=Number(btn.dataset.id); togglePresent(id); }
+      if(btn.dataset && btn.dataset.act==='delete'){ const id=Number(btn.dataset.id); deleteEmployee(id); }
+      if(btn.dataset && btn.dataset.act==='close'){ const id=Number(btn.dataset.id); closeRequest(id); }
+      if(btn.id==='refreshEmployees'){ renderEmployees($('#searchEmployee').value); }
+      if(btn.id==='addActivityBtn'){ addActivity(); }
+      if(btn.id==='addRequestBtn'){ addRequest(); }
+      if(btn.id==='addFinanceBtn'){ addFinance(); }
+    });
+
+    // modal functions
+    function openModal(emp){
+      $('#modal').style.display='flex';
+      $('#modalTitle').textContent = emp? 'Editar Funcionário':'Novo Funcionário';
+      $('#empName').value = emp? emp.name : '';
+      $('#empRole').value = emp? emp.role : '';
+      $('#empSalary').value = emp? emp.salary : '';
+      $('#saveEmployee').dataset.editId = emp? emp.id : '';
+    }
+    function closeModal(){ $('#modal').style.display='none'; }
+
+    function saveEmployee(){
+      const name = $('#empName').value.trim(); const role = $('#empRole').value.trim(); const salary = Number($('#empSalary').value || 0);
+      if(!name || !role) return alert('Preencha nome e cargo.');
+      const employees = load(STORAGE_KEYS.EMP,[]);
+      const editId = $('#saveEmployee').dataset.editId;
+      if(editId){
+        const idx = employees.findIndex(e=>e.id==editId);
+        if(idx>=0){ employees[idx].name=name; employees[idx].role=role; employees[idx].salary=salary; }
+      } else {
+        const id = employees.length? Math.max(...employees.map(e=>e.id))+1 : 1;
+        employees.push({id,name,role,salary,present:false});
+      }
+      save(STORAGE_KEYS.EMP,employees); closeModal(); renderAll();
+    }
+
+    // employees actions
+    function togglePresent(id){ const employees = load(STORAGE_KEYS.EMP,[]); const idx = employees.findIndex(e=>e.id===id); if(idx<0) return; employees[idx].present = !employees[idx].present; save(STORAGE_KEYS.EMP,employees); renderAll(); }
+    function deleteEmployee(id){ if(!confirm('Remover funcionário?')) return; const employees = load(STORAGE_KEYS.EMP,[]).filter(e=>e.id!==id); save(STORAGE_KEYS.EMP,employees); renderAll(); }
+
+    // activities
+    function addActivity(){ const text = $('#activityText').value.trim(); const date = $('#activityDate').value; if(!text||!date) return alert('Informe data e descrição'); const acts = load(STORAGE_KEYS.ACT,[]); const id = acts.length? Math.max(...acts.map(a=>a.id))+1:1; acts.push({id,text,date}); save(STORAGE_KEYS.ACT,acts); $('#activityText').value=''; $('#activityDate').value=''; renderAll(); }
+
+    // requests
+    function addRequest(){ const text=$('#requestText').value.trim(); const type=$('#requestType').value; if(!text) return alert('Descreva a requisição'); const reqs=load(STORAGE_KEYS.REQ,[]); const id=reqs.length?Math.max(...reqs.map(r=>r.id))+1:1; reqs.push({id,text,type,status:'aberto'}); save(STORAGE_KEYS.REQ,reqs); $('#requestText').value=''; renderAll(); }
+    function closeRequest(id){ const reqs=load(STORAGE_KEYS.REQ,[]); const idx=reqs.findIndex(r=>r.id===id); if(idx<0) return; reqs[idx].status='fechado'; save(STORAGE_KEYS.REQ,reqs); renderAll(); }
+
+    // finance
+    function addFinance(){ const rev = Number($('#revenueMonth').value||0); const exp = Number($('#expenseMonth').value||0); const now = new Date(); const month = now.toLocaleString('pt-BR',{month:'short',year:'2-digit'}); const fin = load(STORAGE_KEYS.FIN,[]); fin.push({month,revenue:rev,expense:exp}); save(STORAGE_KEYS.FIN,fin); $('#revenueMonth').value=''; $('#expenseMonth').value=''; renderAll(); }
+
+    // menu nav
+    document.querySelectorAll('nav a').forEach(a=>a.addEventListener('click', (ev)=>{
+      ev.preventDefault(); document.querySelectorAll('nav a').forEach(x=>x.classList.remove('active')); a.classList.add('active');
+      document.querySelectorAll('.section').forEach(s=>s.style.display='none'); document.getElementById(a.dataset.section).style.display='block';
+      buildCharts();
+    }));
+
+    // search live
+    $('#searchEmployee').addEventListener('input', e=>renderEmployees(e.target.value));
+
+    // render everything
+    function renderAll(){ renderEmployees(); renderActivities(); renderRequests(); renderFinanceLog(); buildCharts(); }
+    renderAll();
+
+    // expose open modal by double click on header logo
+    document.querySelector('.logo').addEventListener('dblclick', ()=>openModal());
+  </script>
 </body>
 </html>

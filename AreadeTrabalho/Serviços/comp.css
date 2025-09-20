@@ -4,13 +4,188 @@ body {
     background-color: #f4f6f9;
 }
 
-header {
-    background-color: #1e293b;
+/* Header */
+.header {
+    background: linear-gradient(135deg, #2c5530 0%, #1e3d21 100%);
     color: white;
-    padding: 15px;
-    text-align: center;
-}
-
+    padding: 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  
+  .header-top {
+    background: #1a2e1d;
+    padding: 8px 0;
+    font-size: 12px;
+  }
+  
+  .header-top .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .gov-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .gov-logo {
+    height: 20px;
+  }
+  
+  .accessibility-links {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .accessibility-links a {
+    color: #ccc;
+    text-decoration: none;
+    font-size: 11px;
+  }
+  
+  .accessibility-links a:hover {
+    color: white;
+  }
+  
+  .header-main {
+    padding: 15px 0;
+  }
+  
+  .header-main .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .logo-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .if-logo {
+    height: 50px;
+    width: auto;
+  }
+  
+  .system-title {
+    border-left: 2px solid #4a7c59;
+    padding-left: 15px;
+  }
+  
+  .system-title h1 {
+    font-size: 24px;
+    font-weight: 300;
+    margin-bottom: 2px;
+  }
+  
+  .system-title p {
+    font-size: 13px;
+    opacity: 0.9;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #4a7c59;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  .user-details h3 {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .user-details p {
+    font-size: 12px;
+    opacity: 0.8;
+  }
+  
+  /* Navigation */
+  .navigation {
+    background: #2c5530;
+    border-top: 1px solid #4a7c59;
+  }
+  
+  .nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+  }
+  
+  .nav-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-item {
+    position: relative;
+  }
+  
+  .nav-link {
+    display: block;
+    padding: 12px 20px;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+  }
+  
+  .nav-link:hover,
+  .nav-link.active {
+    background: rgba(255,255,255,0.1);
+    border-bottom-color: #7fb069;
+  }
+  
+  .nav-search {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .search-input {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    width: 200px;
+  }
+  
+  .search-btn {
+    padding: 8px 12px;
+    background: #4a7c59;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  
 .container {
     padding: 20px;
     max-width: 1200px;

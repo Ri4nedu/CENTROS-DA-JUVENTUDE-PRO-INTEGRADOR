@@ -1,108 +1,356 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="cal.css" />
-    <script src="cal.js" defer></script>
-    <title>Calendário</title>
-  </head>
-  <body class="light" id="body">
-    <div class="app">
-      <section class="card">
-        <div class="topbar">
-          <div class="title">
-            <button class="btn" id="prevBtn" aria-label="Mês anterior">
-              ‹
-            </button>
-            <h1 id="monthLabel">Março 2025</h1>
-            <button class="btn" id="nextBtn" aria-label="Próximo mês">›</button>
-            <button class="btn" id="todayBtn">Hoje</button>
-          </div>
-          <div class="controls">
-            <select
-              class="btn"
-              id="monthSelect"
-              aria-label="Selecionar mês"
-            ></select>
-            <select
-              class="btn"
-              id="yearSelect"
-              aria-label="Selecionar ano"
-            ></select>
-            <label class="toggle">
-              <input type="checkbox" id="modeToggle" /> Modo escuro
-            </label>
-          </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema Digital</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      line-height: 1.4;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #2c5530 0%, #1e3d21 100%);
+      color: white;
+      padding: 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+
+    .header-top {
+      background: #1a2e1d;
+      padding: 8px 0;
+      font-size: 12px;
+    }
+
+    .header-top .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .gov-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .accessibility-links {
+      display: flex;
+      gap: 15px;
+    }
+
+    .accessibility-links a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 11px;
+    }
+
+    .accessibility-links a:hover {
+      color: white;
+    }
+
+    .header-main {
+      padding: 15px 0;
+    }
+
+    .header-main .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .if-logo {
+      height: 50px;
+      width: auto;
+    }
+
+    .system-title {
+      border-left: 2px solid #4a7c59;
+      padding-left: 15px;
+    }
+
+    .system-title h1 {
+      font-size: 24px;
+      font-weight: 300;
+      margin-bottom: 2px;
+    }
+
+    .system-title p {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #4a7c59;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .user-details h3 {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .user-details p {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    /* Navegação (desktop) */
+    .navigation {
+      background: #254529;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-menu {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .nav-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Botão menu mobile */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 26px;
+      cursor: pointer;
+    }
+
+    /* Drawer */
+    .drawer {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 260px;
+      height: 100%;
+      background: #1e3d21;
+      color: white;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.3);
+      padding: 20px;
+      transition: left 0.3s ease;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .drawer.active {
+      left: 0;
+    }
+
+    .drawer-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      align-self: flex-end;
+      cursor: pointer;
+    }
+
+    .drawer-menu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .drawer-menu li {
+      margin-bottom: 15px;
+    }
+
+    .drawer-menu a {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .drawer-menu a:hover {
+      color: #4a7c59;
+    }
+
+    /* Responsividade */
+    @media (max-width: 900px) {
+      .nav-menu {
+        display: none;
+      }
+      .menu-toggle {
+        display: block;
+      }
+    }
+
+    /* Conteúdo principal */
+    .content {
+      margin-top: 220px; /* espaço para o header fixo */
+      padding: 20px;
+    }
+
+    .calendar-container {
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    iframe {
+      width: 100%;
+      height: 700px;
+      border: none;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-top">
+      <div class="container">
+        <div class="gov-info">
+          <span>IF</span>
+          <span>INSTITUTO FEDERAL CR/BIOPARK</span>
         </div>
-
-        <div class="calendar">
-          <div class="weekdays" aria-hidden="true">
-            <div>Seg</div>
-            <div>Ter</div>
-            <div>Qua</div>
-            <div>Qui</div>
-            <div>Sex</div>
-            <div>Sáb</div>
-            <div>Dom</div>
-          </div>
-          <div class="grid" id="grid" role="grid" aria-label="Calendário"></div>
-          <div class="footer">
-            <div class="legend">
-              <span><i class="dot"></i> tem evento</span>
-            </div>
-            <a class="link" href="#" id="exportBtn">Exportar eventos (.json)</a>
-          </div>
+        <div class="accessibility-links">
+          <a href="#">Sobre</a>
+          <a href="#">Produção</a>
         </div>
-      </section>
-
-      <aside class="card sidebar" aria-live="polite">
-        <h2 id="sideTitle">Adicionar evento</h2>
-        <div class="date" id="sideDate">Selecione um dia no calendário</div>
-        <form id="eventForm">
-          <div class="field">
-            <label for="evtTitle">Título</label>
-            <input
-              type="text"
-              id="evtTitle"
-              placeholder="Ex.: Reunião do projeto"
-              required
-            />
-          </div>
-          <div
-            class="field"
-            style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px"
-          >
-            <div>
-              <label for="evtTime">Hora</label>
-              <input type="time" id="evtTime" />
-            </div>
-            <div>
-              <label for="evtType">Tipo</label>
-              <select id="evtType">
-                <option value="pessoal">Pessoal</option>
-                <option value="trabalho">Trabalho</option>
-                <option value="estudos">Estudos</option>
-                <option value="outro">Outro</option>
-              </select>
-            </div>
-          </div>
-          <div class="field">
-            <label for="evtDesc">Descrição</label>
-            <textarea id="evtDesc" placeholder="Detalhes (opcional)"></textarea>
-          </div>
-          <div class="controls">
-            <button class="btn primary" type="submit">Salvar</button>
-            <button class="btn" type="reset">Limpar</button>
-            <button class="btn" id="deleteDayBtn" type="button">
-              Excluir todos do dia
-            </button>
-          </div>
-        </form>
-
-        <h2 style="margin-top: 16px">Eventos do dia</h2>
-        <div id="eventList" class="list"></div>
-      </aside>
+      </div>
     </div>
-  </body>
+
+    <div class="header-main">
+      <div class="container">
+        <div class="logo-section">
+          <img src="" alt="Logo" class="if-logo" />
+          <div class="system-title">
+            <h1>SD</h1>
+            <p>Sistema Digital</p>
+          </div>
+        </div>
+
+        <button class="menu-toggle" id="menuToggle">☰</button>
+
+        <div class="user-info">
+          <div class="user-details">
+            <h3>Nome: Bolsista</h3>
+            <p>Agente - Matrícula: 20241234567</p>
+          </div>
+          <div class="user-avatar">JS</div>
+        </div>
+      </div>
+    </div>
+
+   <nav class="navigation">
+            <div class="nav-container">
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active" onclick="showSection('home')">Principal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/AreadeTrabalho/Serviços/comp.html" class="nav-link">Serviços</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/AreadeTrabalho/Quadro de Funcionarios/quadro.html" class="nav-link" onclick="showSection('financial')">Funcionarios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/AreadeTrabalho/Calendario/cal.html" class="nav-link" onclick="showSection('documents')">Calendário</a>
+                    </li>
+                </ul>
+                <div class="nav-search">
+                    <input type="text" class="search-input" placeholder="Buscar no sistema...">
+                    <button class="search-btn">🔍</button>
+                </div>
+            </div>
+        </nav>
+  </header>
+
+  <!-- Drawer (mobile) -->
+  <aside class="drawer" id="drawer">
+    <button class="drawer-close" id="drawerClose">✕</button>
+    <ul class="drawer-menu">
+      <li><a href="#">Principal</a></li>
+      <li><a href="#">Serviços</a></li>
+      <li><a href="#">Funcionarios</a></li>
+      <li><a href="#">Calendário</a></li>
+    </ul>
+  </aside>
+
+  <main class="content">
+    <div class="calendar-container">
+      <h2>Calendário</h2>
+      <iframe src="https://calendar.google.com/calendar/embed?src=pt.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSao_Paulo"></iframe>
+    </div>
+  </main>
+
+  <script>
+    const menuToggle = document.getElementById("menuToggle");
+    const drawer = document.getElementById("drawer");
+    const drawerClose = document.getElementById("drawerClose");
+
+    menuToggle.addEventListener("click", () => {
+      drawer.classList.add("active");
+    });
+
+    drawerClose.addEventListener("click", () => {
+      drawer.classList.remove("active");
+    });
+  </script>
+</body>
 </html>

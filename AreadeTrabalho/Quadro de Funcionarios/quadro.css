@@ -1,28 +1,235 @@
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
-    color: #333;
-}
 
-header.header {
-    background: #003366;
-    color: white;
-}
+ body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      line-height: 1.4;
+    }
 
-.header-top {
-    padding: 10px 0;
-    background: #002244;
-}
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #2c5530 0%, #1e3d21 100%);
+      color: white;
+      padding: 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
 
-.header-top .container, .header-main .container, .nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 15px;
-}
+    .header-top {
+      background: #1a2e1d;
+      padding: 8px 0;
+      font-size: 12px;
+    }
+
+    .header-top .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .gov-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .accessibility-links {
+      display: flex;
+      gap: 15px;
+    }
+
+    .accessibility-links a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 11px;
+    }
+
+    .accessibility-links a:hover {
+      color: white;
+    }
+
+    .header-main {
+      padding: 15px 0;
+    }
+
+    .header-main .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .if-logo {
+      height: 50px;
+      width: auto;
+    }
+
+    .system-title {
+      border-left: 2px solid #4a7c59;
+      padding-left: 15px;
+    }
+
+    .system-title h1 {
+      font-size: 24px;
+      font-weight: 300;
+      margin-bottom: 2px;
+    }
+
+    .system-title p {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #4a7c59;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .user-details h3 {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .user-details p {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    /* Navegação (desktop) */
+    .navigation {
+      background: #254529;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-menu {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .nav-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Botão menu mobile */
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 26px;
+      cursor: pointer;
+    }
+
+    /* Drawer */
+    .drawer {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 260px;
+      height: 100%;
+      background: #1e3d21;
+      color: white;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.3);
+      padding: 20px;
+      transition: left 0.3s ease;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .drawer.active {
+      left: 0;
+    }
+
+    .drawer-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      align-self: flex-end;
+      cursor: pointer;
+    }
+
+    .drawer-menu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .drawer-menu li {
+      margin-bottom: 15px;
+    }
+
+    .drawer-menu a {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .drawer-menu a:hover {
+      color: #4a7c59;
+    }
+
+    /* Responsividade */
+    @media (max-width: 900px) {
+      .nav-menu {
+        display: none;
+      }
+      .menu-toggle {
+        display: block;
+      }
+    }
+
+    /* Conteúdo principal */
+    .content {
+      margin-top: 220px; /* espaço para o header fixo */
+      padding: 20px;
+    }
 
 .gov-info span:first-child {
     font-weight: bold;
