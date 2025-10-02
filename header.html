@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
@@ -5,78 +6,36 @@
   <title>Sistema de Gerenciamento - MicroEmpresas (Front-end)</title>
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    :root{
-      --bg:#f4f6fb; --card:#ffffff; --primary:#2c6fbf; --muted:#6b7280; --accent:#16a34a;
-      --glass: rgba(255,255,255,0.6);
-      --radius:12px; --gap:16px; --maxw:1200px;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:#0f172a;line-height:1.35;padding:24px;display:flex;justify-content:center}
-    .app{width:100%;max-width:var(--maxw);}
+  <!-- Leaflet CSS & JS -->
+   <link rel="stylesheet" href='header.css'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 
-    /* Header */
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-    .brand{display:flex;align-items:center;gap:12px}
-    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--primary),#145398);display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
-    h1{font-size:18px;margin:0}
-    .sub{color:var(--muted);font-size:13px}
-
-    /* Layout */
-    .layout{display:grid;grid-template-columns:260px 1fr;gap:var(--gap)}
-    nav{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 6px 18px rgba(16,24,40,0.06)}
-    nav h3{margin:0 0 12px 0;font-size:14px}
-    nav ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
-    nav a{display:block;padding:8px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:14px}
-    nav a.active, nav a:hover{background:linear-gradient(90deg,rgba(44,111,191,0.08),rgba(22,163,74,0.04));color:var(--primary)}
-
-    main{padding:14px;background:transparent}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
-    .card{background:var(--card);padding:12px;border-radius:12px;box-shadow:0 6px 18px rgba(16,24,40,0.04)}
-    .card h4{margin:0 0 10px 0;font-size:14px}
-    .metric{font-size:20px;font-weight:700}
-    .small{font-size:13px;color:var(--muted)}
-
-    /* Charts & tables */
-    .wide{grid-column:span 2}
-    canvas{width:100%!important;height:220px!important}
-    table{width:100%;border-collapse:collapse}
-    th,td{padding:8px;text-align:left;border-bottom:1px solid #eef2f7;font-size:13px}
-    .actions button{margin-right:6px}
-
-    /* responsive */
-    @media (max-width:920px){.layout{grid-template-columns:1fr} .grid{grid-template-columns:1fr 1fr}.wide{grid-column:auto}}
-    @media (max-width:640px){.grid{grid-template-columns:1fr} nav{display:none}}
-
-    /* small form */
-    .form-row{display:flex;gap:8px}
-    input,select,textarea{padding:8px;border-radius:8px;border:1px solid #e6eef8;font-size:13px;width:100%}
-    .btn{background:var(--primary);color:white;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
-    .btn.ghost{background:transparent;color:var(--primary);border:1px solid rgba(44,111,191,0.12)}
-
-    footer{margin-top:14px;color:var(--muted);font-size:13px}
-
-    /* small helper */
-    .list{display:flex;gap:8px;flex-direction:column}
-    .pill{background:#eef6ff;padding:6px 8px;border-radius:999px;font-size:12px;color:var(--primary)}
-  </style>
 </head>
 <body>
   <div class="app" id="app">
-    <header>
-      <div class="brand">
-        <div class="logo">ME</div>
-        <div>
-          <h1>Sistema de Gerenciamento - MicroEmpresas</h1>
-          <div class="sub">Projeto Integrador II — Lorenzo Zottis • Mateus Rosler • Rian Eduardo</div>
+    <!-- Company Info Header -->
+    <div class="company-header">
+      <div class="company-grid">
+        <div class="company-logo-big">ME</div>
+        <div class="company-info">
+          <h2>MicroEmpresas Ltda.</h2>
+          <p><strong>CNPJ:</strong> 12.345.678/0001-90</p>
+          <p><strong>Endereço:</strong> Rua das Flores, 123 - Centro, Toledo/PR - CEP 85900-000</p>
+          <p><strong>Telefone:</strong> (45) 3055-1234 | <strong>E-mail:</strong> contato@microempresas.com.br</p>
+        </div>
+        <div class="company-stats">
+          <div class="stat-item">
+            <span class="stat-value" id="headerEmployeeCount">--</span>
+            <span class="stat-label">Colaboradores</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value" id="headerActiveProjects">3</span>
+            <span class="stat-label">Projetos Ativos</span>
+          </div>
         </div>
       </div>
-      <div>
-        <button class="btn" id="addEmployeeBtn">+ Funcionário</button>
-      </div>
-    </header>
-
+    </div>
     <div class="layout">
       <nav>
         <h3>Menu</h3>
@@ -130,6 +89,16 @@
               <h4>Últimas requisições</h4>
               <div id="recentRequests" class="list"></div>
             </div>
+
+            <div class="card">
+              <h4>Notícias do Setor</h4>
+              <iframe src="https://www.google.com/search?igu=1&ei=&q=not%C3%ADcias+pequenas+empresas+brasil&oq=not%C3%ADcias+pequenas+empresas&gs_lp=Egxnd3Mtd2l6LXNlcnAiH25vdMOtY2lhcyBwZXF1ZW5hcyBlbXByZXNhcyBicmFzaWwqAggAMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBhAAGBYYHjIGEAAYFhgeMgYQABgWGB4yBhAAGBYYHjIGEAAYFhgeSPASUPEDWPEDcAF4AJABAJgBhQGgAYUBqgEDMC4xuAEDyAEA-AEC-AEBmAICoAKMAaoCC2d3cy13aXotc2VycMICChAAGLADGNYEGEeYAwCIBgGQBgiSBwMxLjGgB9MC&sclient=gws-wiz-serp&ibp=htl;news" title="Notícias"></iframe>
+            </div>
+
+            <div class="card">
+              <h4>Localização da Empresa</h4>
+              <div id="map"></div>
+            </div>
           </div>
         </section>
 
@@ -156,6 +125,9 @@
           <div class="grid">
             <div class="card wide">
               <h4>Cronograma de Atividades</h4>
+              <div style="margin-bottom:12px">
+                <a href="https://calendar.google.com" target="_blank" class="btn" style="display:inline-block;text-decoration:none">📅 Abrir Google Agenda</a>
+              </div>
               <div id="scheduleList" class="list" style="margin-top:10px"></div>
               <div style="margin-top:10px;display:flex;gap:8px">
                 <input id="activityText" placeholder="Nova atividade (descrição)" />
@@ -383,11 +355,29 @@
     $('#searchEmployee').addEventListener('input', e=>renderEmployees(e.target.value));
 
     // render everything
-    function renderAll(){ renderEmployees(); renderActivities(); renderRequests(); renderFinanceLog(); buildCharts(); }
+    function renderAll(){ renderEmployees(); renderActivities(); renderRequests(); renderFinanceLog(); buildCharts(); updateHeaderStats(); }
     renderAll();
+
+    // update header stats
+    function updateHeaderStats(){
+      const employees = load(STORAGE_KEYS.EMP,[]);
+      $('#headerEmployeeCount').textContent = employees.length;
+    }
+
+    // initialize map
+    function initMap(){
+      if(!document.getElementById('map')) return;
+      const map = L.map('map').setView([-24.7136, -53.7431], 14); // Toledo, PR
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+      L.marker([-24.7136, -53.7431]).addTo(map)
+        .bindPopup('<b>MicroEmpresas Ltda.</b><br>Rua das Flores, 123')
+        .openPopup();
+    }
+    setTimeout(initMap, 500);
 
     // expose open modal by double click on header logo
     document.querySelector('.logo').addEventListener('dblclick', ()=>openModal());
   </script>
 </body>
-</html>
