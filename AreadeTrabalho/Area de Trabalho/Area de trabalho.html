@@ -10,6 +10,7 @@
     <script src="area_de_trabalho.js" defer></script>
 </head>
 <body>
+   
     <!-- Header -->
     <header class="header">
         <div class="header-top">
@@ -29,8 +30,7 @@
                 <div class="logo-section">
                     <img src="" alt="Imagem logo" style="width: 85px; height: 85px;  border-radius: 4px; display: flex; align-items: center; justify-content: center;margin: 1%;;"></img>
                     <div class="system-title">
-                        <h1>SD</h1>
-                        <p>Sistema Digital</p>
+                        <h1>Synflow</h1>
                     </div>
                 </div>
 
@@ -173,8 +173,85 @@
                     <button>Enviar Relatório</button>
                 </div>
             </div>
-
+        </main>
         </div>
     </div>
 </div>
+        
+        
+</body>
+ <script type="module">
+  import { supabase } from '/js/supabaseClient.js'
+
+  async function checkAuth() {
+    const { data } = await supabase.auth.getUser()
+    const user = data.user
+    if (!user) {
+      window.location.href = '/area de login/login.html'
+      return
+    }
+
+    // Exibir nome no header (busca na tabela users)
+    const { data: u } = await supabase
+      .from('users')
+      .select('nome, email, papel_global')
+      .eq('id', user.id)
+      .single()
+
+    if (u) {
+      // exemplo: colocar no elemento .user-details
+      const el = document.querySelector('.user-details h3')
+      if (el) el.textContent = `Nome: ${u.nome}`
+      const p = document.querySelector('.user-details p')
+      if (p) p.textContent = `${u.papel_global} - ${user.email}`
+    }
+
+    // Buscar company_id(s) do usuário
+    const { data: links } = await supabase
+      .from('company_users')
+      .select('company_id, role')
+      .eq('user_id', user.id)
+
+    // Se for admin ou employee, pegar primeira company e mostrar funcionários
+    if (links && links.length > 0) {
+      const companyId = links[0].company_id
+
+      // buscar funcionários (join com users)
+      const { data: membros } = await supabase
+        .from('company_users')
+        .select('role, users(id, nome, email)')
+        .eq('company_id', companyId)
+
+      // renderizar lista em um elemento (ex: div#teamList)
+      const team = document.getElementById('teamList')
+      if (team && membros) {
+        team.innerHTML = membros.map(m => `
+          <div class="member">
+            <strong>${m.users.nome}</strong> (${m.role}) - ${m.users.email}
+          </div>
+        `).join('')
+      }
+    }
+  }
+
+  checkAuth()
+</script>
+<script type="module">
+  import { supabase } from "../login/js/supabaseClient.js";
+
+  async function verificarSessao() {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    // Se não estiver logado → redireciona para o login
+    if (!session) {
+      window.location.href = "../../login/area de login/login.html";
+    }
+  }
+
+  verificarSessao();
+</script>
+
+</html>
 

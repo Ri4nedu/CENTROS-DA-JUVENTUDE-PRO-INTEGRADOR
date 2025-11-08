@@ -100,12 +100,12 @@ body {
   
   /* Responsividade */
   @media (max-width: 900px) {
-    .navigation {
-      display: none; /* esconde menu desktop */
-    }
+     .navigation {
+      display: none; /* esconde menu desktop  */
+    } 
     .menu-toggle {
       display: block; /* mostra hamburguer */
-    }
+    } 
   }
   
 .app {
