@@ -1,20 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Criar Empresa</title>
+
+  <!-- Supabase -->
   <script type="module" src="/js/supabaseClient.js"></script>
+
+  <!-- Verifica/Cria usuário no banco -->
+  <script type="module" src="/js/verificarUsuario.js"></script>
+
+  <!-- Script de criação de empresa -->
   <script type="module" src="criarEmpresas.js"></script>
 </head>
 <body>
+
+  <h2>Criar Empresa</h2>
+
   <form id="empresaForm">
-  <input name="nome" placeholder="Nome da empresa" required />
-  <input name="cnpj" placeholder="CNPJ (opcional)" />
-  <button type="submit">Criar Empresa</button>
-</form>
-<div id="result"></div>
-<script type="module" src="/js/criar_empresa.js"></script>
+    <input name="nome" id="nome" placeholder="Nome da empresa" required />
+    <input name="cnpj" id="cnpj" placeholder="CNPJ (opcional)" />
+    <button type="submit">Criar Empresa</button>
+  </form>
+
+  <div id="result"></div>
+
 </body>
 </html>
-

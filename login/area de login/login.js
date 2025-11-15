@@ -1,4 +1,4 @@
-import { supabase } from "/js/supabaseClient.js";
+import { supabase } from "../../js/supabaseClient.js";
 
 const form = document.getElementById("login-form");
 
@@ -6,7 +6,7 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const email = document.getElementById("email").value;
-  const senha = document.getElementById("senha").value; 
+  const senha = document.getElementById("senha").value;
 
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
@@ -14,10 +14,8 @@ form.addEventListener("submit", async (e) => {
   });
 
   if (error) {
-    alert("Login inválido!");
-    return;
+    alert("Login inválido: " + error.message);
+  } else {
+    window.location.href = "../../AreadeTrabalho/Area de trabalho/Area de trabalho.html";
   }
-
-  // se logou
-  window.location.href = "../../AreadeTrabalho/Area de Trabalho/Area de trabalho.html";
 });
