@@ -18,7 +18,7 @@ form.addEventListener("submit", async (e) => {
   const empresaId = form.chave.value.trim();
 
   try {
-    console.log("=== CADASTRANDO FUNCIONÁRIO ===");
+    console.log("=== CADASTRANDO FUNCIONÁRIO (RPC) ===");
 
     // VALIDAÇÕES
     if (!nome || nome.length < 2) {
@@ -37,45 +37,31 @@ form.addEventListener("submit", async (e) => {
       throw new Error("Chave da empresa inválida (deve ser um UUID)");
     }
 
-    // 1. VERIFICAR SE A EMPRESA EXISTE (SEM RLS - TEMPORÁRIO)
-    console.log("Verificando empresa...");
-    console.log("UUID da empresa:", empresaId);
-    
-    const { data: empresa, error: empresaError } = await supabase
-      .from("empresa")
-      .select("id, nome, id_dono")
-      .eq("id", empresaId)
-      .maybeSingle();
-
-    console.log("Empresa encontrada:", empresa);
-    console.log("Erro:", empresaError);
-
-    if (empresaError) {
-      console.error("Erro ao verificar empresa:", empresaError);
-      throw new Error("Erro ao verificar empresa: " + empresaError.message);
-    }
-
-    if (!empresa) {
-      throw new Error("Empresa não encontrada. Verifique a chave.");
-    }
-
-    // 2. VERIFICAR SE O USUÁRIO LOGADO É O DONO
+    // 1. VERIFICAR SE O USUÁRIO LOGADO É O DONO
+    console.log("Verificando permissões...");
     const { data: { user: userLogado } } = await supabase.auth.getUser();
     
     if (!userLogado) {
       throw new Error("Você precisa estar logado para adicionar funcionários");
     }
 
-    if (empresa.id_dono !== userLogado.id) {
-      throw new Error("Apenas o dono da empresa pode adicionar funcionários");
+    const { data: empresa, error: empresaError } = await supabase
+      .from("empresa")
+      .select("id, nome")
+      .eq("id", empresaId)
+      .eq("id_dono", userLogado.id)
+      .single();
+
+    if (empresaError || !empresa) {
+      throw new Error("Empresa não encontrada ou você não é o dono. Verifique a chave.");
     }
 
     console.log("✓ Empresa verificada:", empresa.nome);
 
-    // 3. CRIAR USUÁRIO NO AUTH
+    // 2. CRIAR USUÁRIO NO AUTH
     console.log("Criando usuário no Auth...");
     const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-      email,
+      email: email,
       password: senha,
       options: {
         data: {
@@ -97,31 +83,29 @@ form.addEventListener("submit", async (e) => {
     const novoUsuarioId = signUpData.user.id;
     console.log("✓ Usuário criado no Auth:", novoUsuarioId);
 
-    // 4. VINCULAR USUÁRIO À EMPRESA NA TABELA FUNCIONARIO
-    console.log("Vinculando funcionário à empresa...");
-    const { data: funcionarioData, error: funcError } = await supabase
-      .from("funcionario")
-      .insert([
-        {
-          usuario_id: novoUsuarioId, // Aponta direto para auth.users
-          empresa_id: empresaId,
-          cargo: "colaborador"
-        }
-      ])
-      .select()
-      .single();
+    // 3. USAR FUNÇÃO RPC PARA CRIAR USUÁRIO + FUNCIONÁRIO
+    console.log("Vinculando funcionário via RPC...");
+    
+    const { data: resultado, error: rpcError } = await supabase.rpc(
+      'criar_funcionario_completo',
+      {
+        p_auth_user_id: novoUsuarioId,
+        p_nome: nome,
+        p_email: email,
+        p_empresa_id: empresaId,
+        p_cargo: 'colaborador'
+      }
+    );
 
-    if (funcError) {
-      console.error("Erro ao criar funcionário:", funcError);
-      
-      // NOTA: Não é possível deletar usuário do Auth via client
-      // O usuário ficará no Auth mas sem vínculo com empresa
-      // Ele não conseguirá fazer login no sistema
-      
-      throw new Error("Erro ao vincular funcionário: " + funcError.message);
+    if (rpcError) {
+      console.error("Erro RPC:", rpcError);
+      console.error("Código:", rpcError.code);
+      console.error("Mensagem:", rpcError.message);
+      console.error("Detalhes:", rpcError.details);
+      throw new Error(rpcError.message || "Erro ao vincular funcionário");
     }
 
-    console.log("✓ Funcionário vinculado:", funcionarioData);
+    console.log("✓ Funcionário criado:", resultado);
     console.log("=== SUCESSO ===");
 
     // SUCESSO
@@ -151,6 +135,8 @@ form.addEventListener("submit", async (e) => {
       mensagemErro = "Email inválido.";
     } else if (mensagemErro.includes("Password should be")) {
       mensagemErro = "Senha deve ter pelo menos 6 caracteres.";
+    } else if (mensagemErro.includes("violates foreign key")) {
+      mensagemErro = "Erro ao vincular funcionário. Verifique se a função RPC está criada.";
     }
     
     msg.innerHTML = `❌ <strong>Erro:</strong> ${mensagemErro}`;
@@ -160,4 +146,4 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-console.log("✓ Script cadastrarFuncionario.js carregado");
+console.log("✓ Script cadastrarFuncionario.js carregado (versão RPC)");

@@ -3,25 +3,258 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Área Principal - Funcionários</title>
+    <title>Quadro de Funcionários - Synflow</title>
     <link rel="stylesheet" href="quadro.css" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="quadro.js" defer></script>
+    <script type="module" src="../../js/supabaseClient.js"></script>
+    <script type="module" src="quadro.js"></script>
+    <style>
+      /* Estilos básicos do header (se não estiverem no quadro.css) */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: #f5f7fa;
+        min-height: 100vh;
+      }
+
+      .header {
+        background: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .header-top {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 8px 0;
+      }
+
+      .header-top .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .gov-info {
+        display: flex;
+        gap: 12px;
+        font-size: 13px;
+      }
+
+      .accessibility-links {
+        display: flex;
+        gap: 16px;
+      }
+
+      .accessibility-links a {
+        color: white;
+        text-decoration: none;
+        font-size: 13px;
+        transition: opacity 0.2s;
+      }
+
+      .accessibility-links a:hover {
+        opacity: 0.8;
+      }
+
+      .header-main {
+        padding: 16px 0;
+      }
+
+      .header-main .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo-section {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .if-logo {
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+      }
+
+      .system-title h1 {
+        font-size: 28px;
+        color: #333;
+        font-weight: 700;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .user-details h3 {
+        font-size: 14px;
+        color: #333;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+
+      .user-details p {
+        font-size: 12px;
+        color: #666;
+      }
+
+      .user-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 16px;
+      }
+
+      .navigation {
+        background: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .nav-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .nav-menu {
+        list-style: none;
+        display: flex;
+        gap: 8px;
+      }
+
+      .nav-link {
+        display: block;
+        padding: 14px 20px;
+        color: #666;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 14px;
+        transition: all 0.2s;
+        border-radius: 4px;
+      }
+
+      .nav-link:hover {
+        background: rgba(102, 126, 234, 0.1);
+        color: #667eea;
+      }
+
+      .nav-link.active {
+        background: #667eea;
+        color: white;
+      }
+
+      .nav-search {
+        display: flex;
+        gap: 8px;
+      }
+
+      .search-input {
+        padding: 8px 16px;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        font-size: 14px;
+        width: 250px;
+        outline: none;
+      }
+
+      .search-input:focus {
+        border-color: #667eea;
+      }
+
+      .search-btn {
+        padding: 8px 16px;
+        background: #667eea;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.2s;
+      }
+
+      .search-btn:hover {
+        background: #5568d3;
+      }
+
+      .menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #333;
+      }
+
+      /* Responsividade */
+      @media (max-width: 768px) {
+        .user-details {
+          display: none;
+        }
+
+        .nav-search {
+          display: none;
+        }
+
+        .menu-toggle {
+          display: block;
+        }
+
+        .nav-menu {
+          flex-direction: column;
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          background: white;
+          display: none;
+          box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .nav-menu.active {
+          display: flex;
+        }
+      }
+    </style>
   </head>
   <body>
     <!-- Header -->
-  </head>
-  <body>
     <header class="header">
       <div class="header-top">
         <div class="container">
           <div class="gov-info">
-            <span>IF</span>
-            <span>INSTITUTO FEDERAL CR/BIOPARK</span>
+            <span>SF</span>
+            <span>SYNFLOW - GESTÃO EMPRESARIAL</span>
           </div>
           <div class="accessibility-links">
             <a href="#">Sobre</a>
-            <a href="#">Produção</a>
+            <a href="#" id="btnLogout">Sair</a>
           </div>
         </div>
       </div>
@@ -29,7 +262,9 @@
       <div class="header-main">
         <div class="container">
           <div class="logo-section">
-            <img src="../../imagens-homepage/logo_synflow-removebg-preview.png" alt="Logo" class="if-logo" />
+            <img src="../../imagens-homepage/logo_synflow-removebg-preview.png" 
+                 alt="Logo Synflow" 
+                 class="if-logo" />
             <div class="system-title">
               <h1>Synflow</h1>
             </div>
@@ -39,42 +274,64 @@
   
           <div class="user-info">
             <div class="user-details">
-              <h3>Nome: Bolsista</h3>
-              <p>Agente - Matrícula: 20241234567</p>
+              <h3>Carregando...</h3>
+              <p>Aguarde...</p>
             </div>
-            <div class="user-avatar">JS</div>
+            <div class="user-avatar">--</div>
           </div>
         </div>
       </div>
   
-     <nav class="navigation">
-              <div class="nav-container">
-                  <ul class="nav-menu">
-                       <li class="nav-item">
-                        <a href="/AreadeTrabalho/Area de Trabalho/Area de trabalho.html" class="nav-link" onclick="showSection('home')">Principal</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/AreadeTrabalho/Serviços/comp.html" class="nav-link">Serviços</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/AreadeTrabalho/Quadro de Funcionarios/quadro.html" class="nav-link active" onclick="showSection('financial')">Funcionarios</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/AreadeTrabalho/Calendario/cal.html" class="nav-link" onclick="showSection('documents')">Calendário</a>
-                    </li>
-                  </ul>
-                  <div class="nav-search">
-                      <input type="text" class="search-input" placeholder="Buscar no sistema...">
-                      <button class="search-btn">🔍</button>
-                  </div>
-              </div>
-          </nav>
+      <nav class="navigation">
+        <div class="nav-container">
+          <ul class="nav-menu">
+            <li class="nav-item">
+              <a href="/AreadeTrabalho/Area de Trabalho/Area de trabalho.html" class="nav-link">Principal</a>
+            </li>
+            <li class="nav-item">
+              <a href="/dashboard/empresa/criar.html" class="nav-link">Criar Empresa</a>
+            </li>
+            <li class="nav-item">
+              <a href="/AreadeTrabalho/Quadro de Funcionarios/quadro.html" class="nav-link active">Funcionários</a>
+            </li>
+            <li class="nav-item">
+              <a href="/AreadeTrabalho/Calendario/cal.html" class="nav-link">Calendário</a>
+            </li>
+          </ul>
+          <div class="nav-search">
+            <input type="text" class="search-input" placeholder="Buscar funcionário...">
+            <button class="search-btn">🔍</button>
+          </div>
+        </div>
+      </nav>
     </header>
 
     <!-- Conteúdo principal -->
     <main class="container">
       <h2>Quadro de Funcionários</h2>
-      <section id="grid" class="grid"></section>
+      <section id="grid" class="grid">
+        <p style="text-align: center; padding: 40px; grid-column: 1 / -1;">
+          Carregando funcionários...
+        </p>
+      </section>
     </main>
+
+    <script type="module">
+      import { supabase } from '../../js/supabaseClient.js';
+
+      // Logout
+      document.getElementById('btnLogout')?.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const { error } = await supabase.auth.signOut();
+        if (!error) {
+          window.location.href = '/area de login/login.html';
+        }
+      });
+
+      // Menu toggle mobile
+      document.getElementById('menuToggle')?.addEventListener('click', () => {
+        document.querySelector('.nav-menu')?.classList.toggle('active');
+      });
+    </script>
   </body>
 </html>

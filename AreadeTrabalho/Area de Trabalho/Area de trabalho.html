@@ -1,13 +1,13 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Área Principal</title>
+    <title>Área Principal - Synflow</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="area_de_trabalho.js" defer></script>
+    <script type="module" src="../../js/supabaseClient.js"></script>
+    <script type="module" src="area_de_trabalho.js"></script>
 </head>
 <body>
    
@@ -16,43 +16,46 @@
         <div class="header-top">
             <div class="container">
                 <div class="gov-info">
-                    <span>IF</span>
-                    <span>INSTITUTO FEDERAL CR/BIOPARK</span>
+                    <span>SF</span>
+                    <span>SYNFLOW - GESTÃO EMPRESARIAL</span>
                 </div>
                 <div class="accessibility-links">
                     <a href="#">Sobre</a>
-                    <a href="#">Produção</a>
+                    <a href="#" id="btnLogout">Sair</a>
                 </div>
             </div>
         </div>
         <main class="header-main">
             <div class="container">
                 <div class="logo-section">
-                    <img src="../../imagens-homepage/logo_synflow-removebg-preview.png" alt="Imagem logo" style="width: 85px; height: 85px;  border-radius: 4px; display: flex; align-items: center; justify-content: center;margin: 1%;;"></img>
+                    <img src="../../imagens-homepage/logo_synflow-removebg-preview.png" 
+                         alt="Logo Synflow" 
+                         style="width: 85px; height: 85px; border-radius: 4px;">
                     <div class="system-title">
                         <h1>Synflow</h1>
                     </div>
                 </div>
-
-                
-                    <div class="user-avatar" >JS</div>
-                </div>
+                <div class="user-avatar">--</div>
             </div>
-        </div>
+        </main>
+        
         <nav class="navigation">
             <div class="nav-container">
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="/AreadeTrabalho/Serviços/Area de trabalho.html" class="nav-link active" onclick="showSection('home')">Principal</a>
+                        <a href="/AreadeTrabalho/Serviços/Area de trabalho.html" class="nav-link active">Principal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/AreadeTrabalho/Calendario/cal.html" class="nav-link">Calendário</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/AreadeTrabalho/Quadro de Funcionarios/quadro.html" class="nav-link">Funcionários</a>
                     </li>
                     <li class="nav-item">
                         <a href="/AreadeTrabalho/Serviços/comp.html" class="nav-link">Serviços</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/AreadeTrabalho/Quadro de Funcionarios/quadro.html" class="nav-link" onclick="showSection('financial')">Funcionarios</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/AreadeTrabalho/Calendario/cal.html" class="nav-link" onclick="showSection('documents')">Calendário</a>
+                        <a href="/AreadeTrabalho/ponto eletronico/ponto eletronico.html" class="nav-link">Ponto Eletrônico</a>
                     </li>
                 </ul>
                 <div class="nav-search">
@@ -63,195 +66,116 @@
         </nav>
     </header>
 
-    <!-- Main Container -->
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="content-header">
-                <div>
-                    <h2 class="content-title" id="contentTitle">Dashboard Principal</h2>
-                    <div class="breadcrumb">
-                        <a href="#">Início</a> > <span id="breadcrumbCurrent">Dashboard</span>
-                    </div>
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title" id="contentTitle">Dashboard Principal</h2>
+                <div class="breadcrumb">
+                    <a href="#">Início</a> > <span id="breadcrumbCurrent">Dashboard</span>
                 </div>
             </div>
-            
-            
-
-
-<div class="content-body" id="contentBody">
-    <div id="dashboard-content">
-        <div class="dashboard-grid">
-
-            <!-- Frequência -->
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <div class="card-icon academic">🎓</div>
-                    <h3 class="card-title">Frequência</h3>
-                </div>
-                <div class="card-charts" style="max-width: 150px; margin: auto;">
-                    <canvas id="frequenciaChart" width="150" height="150"></canvas>
-                </div>
-                <div class="card-stats">
-                    <div class="stat-item">
-                        <div class="stat-number">8.7</div>
-                        <div class="stat-label">Média Geral</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">15</div>
-                        <div class="stat-label">Faltas</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">85%</div>
-                        <div class="stat-label">Frequência</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Situação Financeira -->
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <div class="card-icon financial">💰</div>
-                    <h3 class="card-title">Situação Financeira</h3>
-                </div>
-                <p class="card-description">Consulte auxílios, bolsas, pagamentos e débitos pendentes.</p>
-                <div class="card-stats">
-                    <div class="stat-item">
-                        <div class="stat-number">R$ 400</div>
-                        <div class="stat-label">Auxílio Estudantil</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">0</div>
-                        <div class="stat-label">Débitos</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">Em dia</div>
-                        <div class="stat-label">Situação</div>
-                    </div>
-                </div>
-            </div>
-
-           
-             <!-- Meu Perfil -->
-             <div class="dashboard-card" onclick="window.location.href='usuario.html'" style="cursor: pointer;">
-                <!-- conteúdo igual ao anterior -->
-             
-              
-              
-                  <div class="card-header">
-                    <div class="card-icon profile">👤</div>
-                    <h3 class="card-title">Meu Perfil</h3>
-                  </div>
-                  <p class="card-description">Gerencie seus dados pessoais, contatos e configurações.</p>
-                  <div class="card-stats">
-                    <div class="stat-item">
-                      <div class="stat-number">95%</div>
-                      <div class="stat-label">Completo</div>
-                    </div>
-                    <div class="stat-item">
-                      <div class="stat-number">✓</div>
-                      <div class="stat-label">Verificado</div>
-                    </div>
-                    <div class="stat-item">
-                      <div class="stat-number">Ativo</div>
-                      <div class="stat-label">Status</div>
-                    </div>
-                  </div>
-                </div>
-              </a>
-              
-
-            <!-- Entrega de Relatório -->
-            <div class="dashboard-card">
-                <div class="card-header">
-                    <div class="card-icon report">📝</div>
-                    <h3 class="card-title">Entrega de Relatórios</h3>
-                </div>
-                <p class="card-description">Insira seu relatório abaixo e clique em "Enviar".</p>
-                <div class="report-upload">
-                    <textarea placeholder="Digite ou cole seu relatório aqui..."></textarea>
-                    <button>Enviar Relatório</button>
-                </div>
-            </div>
-        </main>
         </div>
-    </div>
-</div>
         
-        
+        <div class="content-body" id="contentBody">
+            <div id="dashboard-content">
+                <div class="dashboard-grid">
+
+                    <!-- Card 1: Empresa/Estatísticas -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <div class="card-icon academic">🏢</div>
+                            <h3 class="card-title">Minha Empresa</h3>
+                        </div>
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <div class="stat-number" id="statEmpresa">Carregando...</div>
+                                <div class="stat-label">Nome</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" id="statFuncionarios">0</div>
+                                <div class="stat-label">Funcionários</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">Ativa</div>
+                                <div class="stat-label">Status</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Situação Financeira -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <div class="card-icon financial">💰</div>
+                            <h3 class="card-title">Situação Financeira</h3>
+                        </div>
+                        <p class="card-description">Informações da empresa</p>
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">0</div>
+                                <div class="stat-label">Funcionários</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">N/A</div>
+                                <div class="stat-label">CNPJ</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">Ativa</div>
+                                <div class="stat-label">Situação</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Meu Perfil -->
+                    <div class="dashboard-card" onclick="window.location.href='usuario.html'" style="cursor: pointer;">
+                        <div class="card-header">
+                            <div class="card-icon profile">👤</div>
+                            <h3 class="card-title">Meu Perfil</h3>
+                        </div>
+                        <p class="card-description">Gerencie seus dados pessoais</p>
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">Empresa</div>
+                                <div class="stat-label">N/A</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">Cargo</div>
+                                <div class="stat-label">N/A</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">Ativo</div>
+                                <div class="stat-label">Status</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Equipe -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <div class="card-icon report">👥</div>
+                            <h3 class="card-title">Equipe</h3>
+                        </div>
+                        <p class="card-description">Membros da sua empresa</p>
+                        <div id="teamList" style="max-height: 200px; overflow-y: auto; padding: 10px;">
+                            <p style="text-align: center; color: #999;">Carregando...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { supabase } from '../../js/supabaseClient.js';
+
+        // Logout
+        document.getElementById('btnLogout')?.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const { error } = await supabase.auth.signOut();
+            if (!error) {
+                window.location.href = '../../login/area de login/login.html';
+            }
+        });
+    </script>
 </body>
- <script type="module">
-  import { supabase } from '/js/supabaseClient.js'
-
-  async function checkAuth() {
-    const { data } = await supabase.auth.getUser()
-    const user = data.user
-    if (!user) {
-      window.location.href = '/area de login/login.html'
-      return
-    }
-
-    // Exibir nome no header (busca na tabela users)
-    const { data: u } = await supabase
-      .from('users')
-      .select('nome, email, papel_global')
-      .eq('id', user.id)
-      .single()
-
-    if (u) {
-      // exemplo: colocar no elemento .user-details
-      const el = document.querySelector('.user-details h3')
-      if (el) el.textContent = `Nome: ${u.nome}`
-      const p = document.querySelector('.user-details p')
-      if (p) p.textContent = `${u.papel_global} - ${user.email}`
-    }
-
-    // Buscar company_id(s) do usuário
-    const { data: links } = await supabase
-      .from('company_users')
-      .select('company_id, role')
-      .eq('user_id', user.id)
-
-    // Se for admin ou employee, pegar primeira company e mostrar funcionários
-    if (links && links.length > 0) {
-      const companyId = links[0].company_id
-
-      // buscar funcionários (join com users)
-      const { data: membros } = await supabase
-        .from('company_users')
-        .select('role, users(id, nome, email)')
-        .eq('company_id', companyId)
-
-      // renderizar lista em um elemento (ex: div#teamList)
-      const team = document.getElementById('teamList')
-      if (team && membros) {
-        team.innerHTML = membros.map(m => `
-          <div class="member">
-            <strong>${m.users.nome}</strong> (${m.role}) - ${m.users.email}
-          </div>
-        `).join('')
-      }
-    }
-  }
-
-  checkAuth()
-</script>
-<script type="module">
-  import { supabase } from "../login/js/supabaseClient.js";
-
-  async function verificarSessao() {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    // Se não estiver logado → redireciona para o login
-    if (!session) {
-      window.location.href = "../../login/area de login/login.html";
-    }
-  }
-
-  verificarSessao();
-</script>
-
 </html>
-

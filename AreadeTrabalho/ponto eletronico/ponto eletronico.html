@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ponto Eletrônico - Synflow</title>
+    <link rel="stylesheet" href="../Area de Trabalho/style.css">
+    <script type="module" src="../../js/supabaseClient.js"></script>
+    <script type="module" src="ponto eletronico.js"></script>
+    <style>
+        .ponto-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .clock-header {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .current-time {
+            font-size: 48px;
+            font-weight: 700;
+            color: #2c5530;
+            font-variant-numeric: tabular-nums;
+            margin-bottom: 10px;
+        }
+
+        .current-date {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .ponto-card {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .status-atual {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #2c553020, #1e3d2120);
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .status-atual h2 {
+            font-size: 24px;
+            color: #2c5530;
+            margin-bottom: 10px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .status-badge.trabalhando {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .status-badge.almoco {
+            background: #FF9800;
+            color: white;
+        }
+
+        .status-badge.fora {
+            background: #666;
+            color: white;
+        }
+
+        .registros-hoje {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .registro-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .registro-item .label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .registro-item .hora {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c5530;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .registro-item .hora.vazio {
+            color: #ccc;
+        }
+
+        .botoes-acao {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-ponto {
+            padding: 16px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn-ponto:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-entrada {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-entrada:hover:not(:disabled) {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .btn-saida-almoco {
+            background: #FF9800;
+            color: white;
+        }
+
+        .btn-saida-almoco:hover:not(:disabled) {
+            background: #f57c00;
+            transform: translateY(-2px);
+        }
+
+        .btn-volta-almoco {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-volta-almoco:hover:not(:disabled) {
+            background: #0b7dda;
+            transform: translateY(-2px);
+        }
+
+        .btn-saida {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-saida:hover:not(:disabled) {
+            background: #da190b;
+            transform: translateY(-2px);
+        }
+
+        .historico {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .historico h3 {
+            font-size: 20px;
+            color: #2c5530;
+            margin-bottom: 20px;
+        }
+
+        .historico-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .historico-item .data {
+            font-weight: 600;
+            color: #2c5530;
+        }
+
+        .historico-item .horas {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .historico-item .total {
+            font-weight: 700;
+            color: #2c5530;
+            font-size: 16px;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .current-time {
+                font-size: 36px;
+            }
+
+            .registros-hoje {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .botoes-acao {
+                grid-template-columns: 1fr;
+            }
+
+            .historico-item {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-top">
+            <div class="container">
+                <div class="gov-info">
+                    <span>SF</span>
+                    <span>SYNFLOW - GESTÃO EMPRESARIAL</span>
+                </div>
+                <div class="accessibility-links">
+                    <a href="#">Sobre</a>
+                    <a href="#" id="btnLogout">Sair</a>
+                </div>
+            </div>
+        </div>
+        <main class="header-main">
+            <div class="container">
+                <div class="logo-section">
+                    <img src="../../imagens-homepage/logo_synflow-removebg-preview.png" 
+                         alt="Logo Synflow" 
+                         style="width: 85px; height: 85px; border-radius: 4px;">
+                    <div class="system-title">
+                        <h1>Synflow</h1>
+                    </div>
+                </div>
+                <div class="user-avatar">--</div>
+            </div>
+        </main>
+        
+        <nav class="navigation">
+            <div class="nav-container">
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="/AreadeTrabalho/Area de Trabalho/Area de trabalho.html" class="nav-link">Principal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/AreadeTrabalho/Quadro de Funcionarios/quadro.html" class="nav-link">Funcionários</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/AreadeTrabalho/ponto eletronico/ponto eletronico.html" class="nav-link active">Ponto Eletrônico</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/AreadeTrabalho/Calendario/cal.html" class="nav-link">Calendário</a>
+                    </li>
+                </ul>
+                <div class="nav-search">
+                    <input type="text" class="search-input" placeholder="Buscar no sistema...">
+                    <button class="search-btn">🔍</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title">⏰ Ponto Eletrônico</h2>
+                <div class="breadcrumb">
+                    <a href="/AreadeTrabalho/Area de Trabalho/Area de trabalho.html">Início</a> > <span>Ponto Eletrônico</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-body">
+            <div class="ponto-container">
+                <!-- Relógio -->
+                <div class="clock-header">
+                    <div class="current-time" id="currentTime">00:00:00</div>
+                    <div class="current-date" id="currentDate">Carregando...</div>
+                </div>
+
+                <!-- Mensagem -->
+                <div id="mensagem" class="message"></div>
+
+                <!-- Card de Ponto -->
+                <div class="ponto-card">
+                    <div class="status-atual" id="statusAtual">
+                        <h2>Carregando...</h2>
+                        <span class="status-badge fora">Aguarde</span>
+                    </div>
+
+                    <div class="registros-hoje">
+                        <div class="registro-item">
+                            <div class="label">Entrada</div>
+                            <div class="hora" id="horaEntrada">--:--</div>
+                        </div>
+                        <div class="registro-item">
+                            <div class="label">Saída Almoço</div>
+                            <div class="hora" id="horaSaidaAlmoco">--:--</div>
+                        </div>
+                        <div class="registro-item">
+                            <div class="label">Volta Almoço</div>
+                            <div class="hora" id="horaVoltaAlmoco">--:--</div>
+                        </div>
+                        <div class="registro-item">
+                            <div class="label">Saída</div>
+                            <div class="hora" id="horaSaida">--:--</div>
+                        </div>
+                    </div>
+
+                    <div class="botoes-acao">
+                        <button class="btn-ponto btn-entrada" id="btnEntrada" disabled>
+                            📥 Registrar Entrada
+                        </button>
+                        <button class="btn-ponto btn-saida-almoco" id="btnSaidaAlmoco" disabled>
+                            🍽️ Saída para Almoço
+                        </button>
+                        <button class="btn-ponto btn-volta-almoco" id="btnVoltaAlmoco" disabled>
+                            ↩️ Volta do Almoço
+                        </button>
+                        <button class="btn-ponto btn-saida" id="btnSaida" disabled>
+                            📤 Registrar Saída
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Histórico -->
+                <div class="historico">
+                    <h3>📅 Últimos Registros</h3>
+                    <div id="historicoLista">
+                        <div style="text-align:center;color:#666;padding:40px;">Carregando histórico...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { supabase } from '../../js/supabaseClient.js';
+
+        // Logout
+        document.getElementById('btnLogout')?.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const { error } = await supabase.auth.signOut();
+            if (!error) {
+                window.location.href = '../../login/area de login/login.html';
+            }
+        });
+    </script>
+</body>
+</html>
