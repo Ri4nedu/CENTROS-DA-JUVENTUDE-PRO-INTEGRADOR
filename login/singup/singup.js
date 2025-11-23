@@ -56,7 +56,7 @@ form.addEventListener("submit", async (e) => {
       throw new Error("Erro ao criar usuário. Tente novamente.");
     }
 
-    console.log("✓ Usuário criado no Auth:", signUpData.user.id);
+    console.log(" Usuário criado no Auth:", signUpData.user.id);
 
     // 2. VERIFICAR SE PRECISA CONFIRMAR EMAIL
     const precisaConfirmar = signUpData.user.identities && 
@@ -69,13 +69,13 @@ form.addEventListener("submit", async (e) => {
     
     if (precisaConfirmar) {
       msg.innerHTML = `
-        ✅ <strong>Cadastro realizado!</strong><br>
+         <strong>Cadastro realizado!</strong><br>
         Um email de confirmação foi enviado para <strong>${email}</strong>.<br>
         Por favor, verifique sua caixa de entrada e spam.
       `;
     } else {
       msg.innerHTML = `
-        ✅ <strong>Cadastro realizado com sucesso!</strong><br>
+         <strong>Cadastro realizado com sucesso!</strong><br>
         Redirecionando...
       `;
       
@@ -106,7 +106,7 @@ form.addEventListener("submit", async (e) => {
       mensagemErro = "Senha muito fraca. Use pelo menos 6 caracteres.";
     }
     
-    msg.innerHTML = `❌ <strong>Erro:</strong> ${mensagemErro}`;
+    msg.innerHTML = ` <strong>Erro:</strong> ${mensagemErro}`;
     
   } finally {
     submitBtn.disabled = false;

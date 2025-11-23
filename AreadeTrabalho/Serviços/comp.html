@@ -3,124 +3,258 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="comp.css" />
+    <title>Demandas de Compras - Synflow</title>
+    <link rel="stylesheet" href="../Area de Trabalho/style.css" />
+    <script type="module" src="../../js/supabaseClient.js"></script>
     <script src="comp.js" defer></script>
-    <title>Dashboard - Demandas de Compras</title>
+    <style>
+      .filters {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+      }
+
+      .filters input,
+      .filters select {
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        flex: 1;
+        min-width: 200px;
+      }
+
+      .filters input:focus,
+      .filters select:focus {
+        outline: none;
+        border-color: #2c5530;
+      }
+
+      #demandasTable {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      #demandasTable th,
+      #demandasTable td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+      }
+
+      #demandasTable th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+        color: #2c5530;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      #demandasTable tbody tr {
+        transition: background 0.2s;
+      }
+
+      #demandasTable tbody tr:hover {
+        background-color: #f8f9fa;
+      }
+
+      .status {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 12px;
+        text-transform: uppercase;
+        display: inline-block;
+      }
+
+      .status.pendente {
+        background-color: #fef08a;
+        color: #854d0e;
+      }
+
+      .status.andamento {
+        background-color: #bfdbfe;
+        color: #1e3a8a;
+      }
+
+      .status.concluido {
+        background-color: #bbf7d0;
+        color: #166534;
+      }
+
+      @media (max-width: 768px) {
+        #demandasTable {
+          font-size: 12px;
+        }
+
+        #demandasTable th,
+        #demandasTable td {
+          padding: 10px;
+        }
+
+        .filters {
+          flex-direction: column;
+        }
+
+        .filters input,
+        .filters select {
+          width: 100%;
+        }
+      }
+    </style>
   </head>
   <body>
     <!-- Header -->
     <header class="header">
       <div class="header-top">
-          <div class="container">
-              <div class="gov-info">
-                  <span>IF</span>
-                  <span>INSTITUTO FEDERAL CR/BIOPARK</span>
-              </div>
-              <div class="accessibility-links">
-                  <a href="#">Sobre</a>
-                  <a href="#">Produção</a>
-              </div>
+        <div class="container">
+          <div class="gov-info">
+            <span>SF</span>
+            <span>SYNFLOW - GESTÃO EMPRESARIAL</span>
           </div>
+          <div class="accessibility-links">
+            <a href="#">Sobre</a>
+            <a href="#" id="btnLogout">Sair</a>
+          </div>
+        </div>
       </div>
+
       <main class="header-main">
-          <div class="container">
-              <div class="logo-section">
-                  <img src="../../imagens-homepage/logo_synflow-removebg-preview.png" alt="Imagem logo" style="width: 85px; height: 85px;  border-radius: 4px; display: flex; align-items: center; justify-content: center;margin: 1%;;"></img>
-                  <div class="system-title">
-                      <h1>Synflow</h1>
-                  </div>
-              </div>
-
-              
-                  <div class="user-avatar" >JS</div>
-              </div>
+        <div class="container">
+          <div class="logo-section">
+            <img
+              src="../../imagens-homepage/logo_synflow-removebg-preview.png"
+              alt="Logo Synflow"
+              style="width: 85px; height: 85px; border-radius: 4px"
+            />
+            <div class="system-title">
+              <h1>Synflow</h1>
+            </div>
           </div>
-      </div>
+          <div class="user-avatar">JS</div>
+        </div>
+      </main>
+
       <nav class="navigation">
-          <div class="nav-container">
-              <ul class="nav-menu">
-                  <li class="nav-item">
-                        <a href="/AreadeTrabalho/Area de Trabalho/Area de trabalho.html" class="nav-link" onclick="showSection('home')">Principal</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/AreadeTrabalho/Serviços/comp.html" class="nav-link active">Serviços</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/AreadeTrabalho/Quadro de Funcionarios/quadro.html" class="nav-link" onclick="showSection('financial')">Funcionarios</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/AreadeTrabalho/Calendario/cal.html" class="nav-link" onclick="showSection('documents')">Calendário</a>
-                    </li>
-              </ul>
-              <div class="nav-search">
-                  <input type="text" class="search-input" placeholder="Buscar no sistema...">
-                  <button class="search-btn">🔍</button>
-              </div>
+        <div class="nav-container">
+          <ul class="nav-menu">
+                 <li class="nav-item">
+                    <a href="/AreadeTrabalho/Area de Trabalho/Area de trabalho.html" class="nav-link">Principal</a>
+                 </li>
+                 <li class="nav-item">
+                    <a href="/AreadeTrabalho/Calendario/cal.html" class="nav-link">Calendário</a>
+                </li>
+                <li class="nav-item">
+                     <a href="/AreadeTrabalho/Quadro de Funcionarios/quadro.html" class="nav-link">Funcionários</a>
+                </li>
+                 <li class="nav-item">
+                     <a href="/AreadeTrabalho/Serviços/comp.html" class="nav-link active">Serviços</a>
+                </li>
+                 <li class="nav-item">
+                     <a href="/AreadeTrabalho/ponto eletronico/ponto eletronico.html" class="nav-link">Ponto Eletrônico</a>
+                </li>
+             </ul>
+          <div class="nav-search">
+            <input type="text" class="search-input" placeholder="Buscar no sistema..." />
+            <button class="search-btn">🔍</button>
           </div>
+        </div>
       </nav>
-  </header>
+    </header>
 
-    <div class="container">
-      <div class="filters">
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="🔍 Buscar por setor ou descrição..."
-        />
-        <select id="statusFilter">
-          <option value="all">Todos os Status</option>
-          <option value="pendente">Pendente</option>
-          <option value="andamento">Em Andamento</option>
-          <option value="concluido">Concluído</option>
-        </select>
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="content-header">
+        <div>
+          <h2 class="content-title">🛒 Demandas de Compras</h2>
+          <div class="breadcrumb">
+            <a href="/AreadeTrabalho/Area de Trabalho/Area de trabalho.html">Início</a> >
+            <span>Serviços</span>
+          </div>
+        </div>
       </div>
 
-      <table id="demandasTable">
-        <thead>
-          <tr>
-            <th>Nº Pedido</th>
-            <th>Setor</th>
-            <th>Descrição</th>
-            <th>Status</th>
-            <th>Responsável</th>
-            <th>Prazo</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>#001</td>
-            <td>TI</td>
-            <td>Compra de notebooks</td>
-            <td><span class="status pendente">Pendente</span></td>
-            <td>Ana</td>
-            <td>05/09/2025</td>
-          </tr>
-          <tr>
-            <td>#002</td>
-            <td>Marketing</td>
-            <td>Material gráfico</td>
-            <td><span class="status andamento">Em Andamento</span></td>
-            <td>João</td>
-            <td>10/09/2025</td>
-          </tr>
-          <tr>
-            <td>#003</td>
-            <td>RH</td>
-            <td>Cadeiras ergonômicas</td>
-            <td><span class="status concluido">Concluído</span></td>
-            <td>Mariana</td>
-            <td>01/09/2025</td>
-          </tr>
-          <tr>
-            <td>#004</td>
-            <td>Financeiro</td>
-            <td>Software de gestão</td>
-            <td><span class="status pendente">Pendente</span></td>
-            <td>Carlos</td>
-            <td>15/09/2025</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+      <div class="content-body">
+        <div class="filters">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="🔍 Buscar por setor ou descrição..."
+          />
+          <select id="statusFilter">
+            <option value="all">Todos os Status</option>
+            <option value="pendente">Pendente</option>
+            <option value="andamento">Em Andamento</option>
+            <option value="concluido">Concluído</option>
+          </select>
+        </div>
+
+        <table id="demandasTable">
+          <thead>
+            <tr>
+              <th>Nº Pedido</th>
+              <th>Setor</th>
+              <th>Descrição</th>
+              <th>Status</th>
+              <th>Responsável</th>
+              <th>Prazo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>#001</td>
+              <td>TI</td>
+              <td>Compra de notebooks</td>
+              <td><span class="status pendente">Pendente</span></td>
+              <td>Ana</td>
+              <td>05/09/2025</td>
+            </tr>
+            <tr>
+              <td>#002</td>
+              <td>Marketing</td>
+              <td>Material gráfico</td>
+              <td><span class="status andamento">Em Andamento</span></td>
+              <td>João</td>
+              <td>10/09/2025</td>
+            </tr>
+            <tr>
+              <td>#003</td>
+              <td>RH</td>
+              <td>Cadeiras ergonômicas</td>
+              <td><span class="status concluido">Concluído</span></td>
+              <td>Mariana</td>
+              <td>01/09/2025</td>
+            </tr>
+            <tr>
+              <td>#004</td>
+              <td>Financeiro</td>
+              <td>Software de gestão</td>
+              <td><span class="status pendente">Pendente</span></td>
+              <td>Carlos</td>
+              <td>15/09/2025</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <script type="module">
+      import { supabase } from "../../js/supabaseClient.js";
+
+      // Logout
+      document.getElementById("btnLogout")?.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const { error } = await supabase.auth.signOut();
+        if (!error) {
+          window.location.href = "../../login/area de login/login.html";
+        }
+      });
+    </script>
   </body>
 </html>

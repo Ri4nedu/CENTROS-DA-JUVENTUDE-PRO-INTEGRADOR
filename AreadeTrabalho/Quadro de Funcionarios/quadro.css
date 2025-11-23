@@ -3,15 +3,14 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 24px;
-  padding: 20px;
-  max-width: 1400px;
-  margin: 0 auto;
+  padding: 20px 0;
+  width: 100%;
 }
 
 /* Card de Funcionário */
 .funcionario-card {
   background: white;
-  border-radius: 12px;
+  border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -25,7 +24,7 @@
 
 /* Header do Card */
 .card-header-func {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2c5530 0%, #1e3d21 100%);
   padding: 20px;
   display: flex;
   align-items: center;
@@ -38,7 +37,7 @@
   height: 60px;
   border-radius: 50%;
   background: white;
-  color: #667eea;
+  color: #2c5530;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,7 +124,7 @@
 }
 
 .cargo {
-  color: #667eea;
+  color: #2c5530;
   font-size: 14px;
   font-weight: 500;
   margin: 0 0 8px 0;
@@ -177,39 +176,13 @@
   gap: 4px;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-  .grid {
-    grid-template-columns: 1fr;
-    padding: 16px;
-  }
-
-  .funcionario-card {
-    max-width: 100%;
-  }
-}
-
-/* Estilos do Container Principal */
-.container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.container h2 {
-  font-size: 28px;
-  color: #333;
-  margin-bottom: 24px;
-  padding-left: 20px;
-}
-
 /* Estados Vazios e de Erro */
 .empty-state,
 .error-state {
   text-align: center;
   padding: 60px 20px;
   background: white;
-  border-radius: 12px;
+  border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   grid-column: 1 / -1;
 }
@@ -251,21 +224,14 @@
 .funcionario-card:nth-child(5) { animation-delay: 0.25s; }
 .funcionario-card:nth-child(6) { animation-delay: 0.3s; }
 
-/* Loading State */
-.loading {
-  text-align: center;
-  padding: 40px;
-  color: #666;
-  font-size: 16px;
-}
+/* Responsividade */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+    padding: 16px 0;
+  }
 
-.loading::after {
-  content: '...';
-  animation: dots 1.5s steps(4, end) infinite;
-}
-
-@keyframes dots {
-  0%, 20% { content: '.'; }
-  40% { content: '..'; }
-  60%, 100% { content: '...'; }
+  .funcionario-card {
+    max-width: 100%;
+  }
 }

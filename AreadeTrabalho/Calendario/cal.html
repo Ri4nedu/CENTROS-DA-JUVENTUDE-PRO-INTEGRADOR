@@ -3,21 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Synflow</title>
-  <link rel="stylesheet" href="cal.css">
-  <script src="cal.js"></script>
+  <title>Calendário - Synflow</title>
+  <link rel="stylesheet" href="../Area de Trabalho/style.css">
+  <script type="module" src="../../js/supabaseClient.js"></script>
+  <style>
+    .calendar-container {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      overflow: hidden;
+    }
+
+    .calendar-container h2 {
+      font-size: 24px;
+      color: #2c5530;
+      margin-bottom: 20px;
+    }
+
+    .calendar-wrapper {
+      position: relative;
+      width: 100%;
+      padding-bottom: 75%; /* Aspect ratio 4:3 */
+      height: 0;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .calendar-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .calendar-wrapper {
+        padding-bottom: 100%; /* Mais quadrado em mobile */
+      }
+
+      .calendar-container {
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <!-- Header -->
   <header class="header">
     <div class="header-top">
       <div class="container">
         <div class="gov-info">
-          <span>IF</span>
-          <span>INSTITUTO FEDERAL CR/BIOPARK</span>
+          <span>SF</span>
+          <span>SYNFLOW - GESTÃO EMPRESARIAL</span>
         </div>
         <div class="accessibility-links">
           <a href="#">Sobre</a>
-          <a href="#">Produção</a>
+          <a href="#" id="btnLogout">Sair</a>
         </div>
       </div>
     </div>
@@ -25,66 +71,82 @@
     <div class="header-main">
       <div class="container">
         <div class="logo-section">
-          <img src="../../imagens-homepage/logo_synflow-removebg-preview.png" alt="Logo" class="if-logo" />
+          <img 
+            src="../../imagens-homepage/logo_synflow-removebg-preview.png" 
+            alt="Logo Synflow" 
+            style="width: 85px; height: 85px; border-radius: 4px;"
+          />
           <div class="system-title">
             <h1>Synflow</h1>
           </div>
         </div>
-
-        <button class="menu-toggle" id="menuToggle">☰</button>
-
-        <div class="user-info">
-          <div class="user-details">
-            <h3>Nome: Bolsista</h3>
-            <p>Agente - Matrícula: 20241234567</p>
-          </div>
-          <div class="user-avatar">JS</div>
-        </div>
+        <div class="user-avatar">JS</div>
       </div>
     </div>
 
-   <nav class="navigation">
-            <div class="nav-container">
-                <ul class="nav-menu">
+    <nav class="navigation">
+      <div class="nav-container">
+        <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="/AreadeTrabalho/Area de Trabalho/Area de trabalho.html" class="nav-link" onclick="showSection('home')">Principal</a>
+                        <a href="/AreadeTrabalho/Area de Trabalho/Area de trabalho.html" class="nav-link">Principal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/AreadeTrabalho/Calendario/cal.html" class="nav-link active">Calendário</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/AreadeTrabalho/Quadro de Funcionarios/quadro.html" class="nav-link">Funcionários</a>
                     </li>
                     <li class="nav-item">
                         <a href="/AreadeTrabalho/Serviços/comp.html" class="nav-link">Serviços</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/AreadeTrabalho/Quadro de Funcionarios/quadro.html" class="nav-link" onclick="showSection('financial')">Funcionarios</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/AreadeTrabalho/Calendario/cal.html" class="nav-link active" onclick="showSection('documents')">Calendário</a>
+                        <a href="/AreadeTrabalho/ponto eletronico/ponto eletronico.html" class="nav-link">Ponto Eletrônico</a>
                     </li>
                 </ul>
-                <div class="nav-search">
-                    <input type="text" class="search-input" placeholder="Buscar no sistema...">
-                    <button class="search-btn">🔍</button>
-                </div>
-            </div>
-        </nav>
+        <div class="nav-search">
+          <input type="text" class="search-input" placeholder="Buscar no sistema...">
+          <button class="search-btn">🔍</button>
+        </div>
+      </div>
+    </nav>
   </header>
 
-  <!-- Drawer (mobile) -->
-  <aside class="drawer" id="drawer">
-    <button class="drawer-close" id="drawerClose">✕</button>
-    <ul class="drawer-menu">
-      <li><a href="#">Principal</a></li>
-      <li><a href="#">Serviços</a></li>
-      <li><a href="#">Funcionarios</a></li>
-      <li><a href="#">Calendário</a></li>
-    </ul>
-  </aside>
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="content-header">
+      <div>
+        <h2 class="content-title">📅 Calendário</h2>
+        <div class="breadcrumb">
+          <a href="/AreadeTrabalho/Area de Trabalho/Area de trabalho.html">Início</a> > 
+          <span>Calendário</span>
+        </div>
+      </div>
+    </div>
 
-  <main class="content">
-    <div class="calendar-container">
-      <h2>Calendário</h2>
-      <iframe src="https://calendar.google.com/calendar/embed?src=pt.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSao_Paulo"></iframe>
+    <div class="content-body">
+      <div class="calendar-container">
+        <div class="calendar-wrapper">
+          <iframe 
+            src="https://calendar.google.com/calendar/embed?src=pt.brazilian%23holiday%40group.v.calendar.google.com&ctz=America%2FSao_Paulo"
+            frameborder="0"
+            scrolling="no"
+          ></iframe>
+        </div>
+      </div>
     </div>
   </main>
 
+  <script type="module">
+    import { supabase } from '../../js/supabaseClient.js';
 
+    // Logout
+    document.getElementById('btnLogout')?.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const { error } = await supabase.auth.signOut();
+      if (!error) {
+        window.location.href = '../../login/area de login/login.html';
+      }
+    });
+  </script>
 </body>
 </html>

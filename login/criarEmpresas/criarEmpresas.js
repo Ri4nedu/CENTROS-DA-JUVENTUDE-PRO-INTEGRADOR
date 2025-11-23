@@ -31,7 +31,7 @@ form.addEventListener("submit", async (e) => {
       throw new Error("Você precisa estar logado para criar uma empresa.");
     }
     
-    console.log("✓ Usuário autenticado:", user.id);
+    console.log(" Usuário autenticado:", user.id);
 
     // PASSO 2: Validar CNPJ (se fornecido)
     if (cnpj && cnpj.length > 0) {
@@ -42,7 +42,7 @@ form.addEventListener("submit", async (e) => {
         throw new Error("CNPJ inválido. Deve ter 14 dígitos.");
       }
       
-      console.log("✓ CNPJ válido:", cnpjLimpo);
+      console.log(" CNPJ válido:", cnpjLimpo);
     }
 
     // PASSO 3: Inserir empresa (aponta direto para auth.users)
@@ -75,13 +75,13 @@ form.addEventListener("submit", async (e) => {
       }
     }
 
-    console.log("✓ Empresa criada:", empresa);
+    console.log(" Empresa criada:", empresa);
     console.log("=== SUCESSO ===");
 
     // SUCESSO
     result.style.color = "green";
     result.innerHTML = `
-      ✅ <strong>Empresa criada com sucesso!</strong><br>
+       <strong>Empresa criada com sucesso!</strong><br>
       <b>Nome:</b> ${empresa.nome}<br>
       ${empresa.cnpj ? `<b>CNPJ:</b> ${formatarCNPJ(empresa.cnpj)}<br>` : ''}
       <b>ID:</b> ${empresa.id}
@@ -101,7 +101,7 @@ form.addEventListener("submit", async (e) => {
     
     result.style.color = "red";
     result.innerHTML = `
-      ❌ <strong>Erro:</strong> ${erro.message}
+       <strong>Erro:</strong> ${erro.message}
     `;
     
   } finally {
@@ -135,4 +135,4 @@ if (cnpjInput) {
   });
 }
 
-console.log("✓ Script criarEmpresas.js carregado");
+console.log(" Script criarEmpresas.js carregado");

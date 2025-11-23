@@ -56,7 +56,7 @@ form.addEventListener("submit", async (e) => {
       throw new Error("Empresa não encontrada ou você não é o dono. Verifique a chave.");
     }
 
-    console.log("✓ Empresa verificada:", empresa.nome);
+    console.log(" Empresa verificada:", empresa.nome);
 
     // 2. CRIAR USUÁRIO NO AUTH
     console.log("Criando usuário no Auth...");
@@ -81,7 +81,7 @@ form.addEventListener("submit", async (e) => {
     }
 
     const novoUsuarioId = signUpData.user.id;
-    console.log("✓ Usuário criado no Auth:", novoUsuarioId);
+    console.log(" Usuário criado no Auth:", novoUsuarioId);
 
     // 3. USAR FUNÇÃO RPC PARA CRIAR USUÁRIO + FUNCIONÁRIO
     console.log("Vinculando funcionário via RPC...");
@@ -111,7 +111,7 @@ form.addEventListener("submit", async (e) => {
     // SUCESSO
     msg.style.color = "green";
     msg.innerHTML = `
-      ✅ <strong>Funcionário cadastrado com sucesso!</strong><br>
+       <strong>Funcionário cadastrado com sucesso!</strong><br>
       <b>Nome:</b> ${nome}<br>
       <b>Email:</b> ${email}<br>
       <b>Empresa:</b> ${empresa.nome}<br>

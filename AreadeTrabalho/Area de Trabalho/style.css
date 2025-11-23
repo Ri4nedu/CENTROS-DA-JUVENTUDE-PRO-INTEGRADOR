@@ -117,6 +117,10 @@ body {
   font-size: 16px;
 }
 
+#login_link{
+  text-decoration: none;
+  color: white;
+}
 .user-details h3 {
   font-size: 14px;
   font-weight: 500;
