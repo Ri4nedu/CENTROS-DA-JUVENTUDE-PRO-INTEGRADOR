@@ -1,383 +1,781 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sistema de Gerenciamento - MicroEmpresas (Front-end)</title>
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Leaflet CSS & JS -->
-   <link rel="stylesheet" href='header.css'>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-
-</head>
-<body>
-  <div class="app" id="app">
-    <!-- Company Info Header -->
-    <div class="company-header">
-      <div class="company-grid">
-        <div class="company-logo-big">ME</div>
-        <div class="company-info">
-          <h2>MicroEmpresas Ltda.</h2>
-          <p><strong>CNPJ:</strong> 12.345.678/0001-90</p>
-          <p><strong>Endereço:</strong> Rua das Flores, 123 - Centro, Toledo/PR - CEP 85900-000</p>
-          <p><strong>Telefone:</strong> (45) 3055-1234 | <strong>E-mail:</strong> contato@microempresas.com.br</p>
-        </div>
-        <div class="company-stats">
-          <div class="stat-item">
-            <span class="stat-value" id="headerEmployeeCount">--</span>
-            <span class="stat-label">Colaboradores</span>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sistema de Gerenciamento - MicroEmpresas (Front-end)</title>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="header.css" />
+    <script type="module" src="/js/supabaseClient.js"></script>
+    <script type="module" src="/AreadeTrabalho/ponto eletronico/ponto eletronico.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  </head>
+  <body>
+    <div class="app" id="app">
+      <!-- Company Info Header -->
+      <div class="company-header">
+        <div class="company-grid">
+          <div class="company-logo-big">ME</div>
+          <div class="company-info">
+            <h2>MicroEmpresas Ltda.</h2>
+            <p><strong>CNPJ:</strong> 12.345.678/0001-90</p>
+            <p>
+              <strong>Endereço:</strong> Rua das Flores, 123 - Centro, Toledo/PR
+              - CEP 85900-000
+            </p>
+            <p>
+              <strong>Telefone:</strong> (45) 3055-1234 |
+              <strong>E-mail:</strong> contato@microempresas.com.br
+            </p>
           </div>
-          <div class="stat-item">
-            <span class="stat-value" id="headerActiveProjects">3</span>
-            <span class="stat-label">Projetos Ativos</span>
+          <div class="company-stats">
+            <div class="stat-item">
+              <span class="stat-value" id="headerEmployeeCount">--</span>
+              <span class="stat-label">Colaboradores</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value" id="headerActiveProjects">3</span>
+              <span class="stat-label">Projetos Ativos</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="layout">
-      <nav>
-        <h3>Menu</h3>
-        <ul>
-          <li><a href="#" class="active" data-section="dashboard">Dashboard</a></li>
-          <li><a href="#" data-section="funcionarios">Funcionários</a></li>
-          <li><a href="#" data-section="cronograma">Cronograma</a></li>
-          <li><a href="#" data-section="requisicoes">Requisições</a></li>
-          <li><a href="#" data-section="financeiro">Financeiro</a></li>
-        </ul>
-      </nav>
+      <div class="layout">
+        <nav>
+          <h3>Menu</h3>
+          <ul>
+            <li>
+              <a href="#" class="active" data-section="dashboard">Dashboard</a>
+            </li>
+            <li><a href="#" data-section="funcionarios">Funcionários</a></li>
+            <li><a href="#" data-section="cronograma">Cronograma</a></li>
+            <li><a href="#" data-section="requisicoes">Requisições</a></li>
+            <li><a href="#" data-section="financeiro">Financeiro</a></li>
+            <li><a href="#" data-section="ponto">Ponto Eletrônico</a></li>
+          </ul>
+        </nav>
 
-      <main>
-        <!-- Dashboard -->
-        <section id="dashboard" class="section">
-          <div class="grid">
+        <main>
+          <!-- Dashboard -->
+          <section id="dashboard" class="section">
+            <div class="grid">
+              <div class="card">
+                <h4>Presenças (hoje)</h4>
+                <div style="display: flex; align-items: center; gap: 12px">
+                  <canvas id="presencaChart"></canvas>
+                  <div>
+                    <div class="metric" id="presentCount">--</div>
+                    <div class="small">Presentes / Ausentes</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <h4>Funcionários</h4>
+                <div class="metriac" id="totalEmployees">--</div>
+                <div class="small">Total de colaboradores cadastrados</div>
+              </div>
+
+              <div class="card">
+                <h4>Requisições Abertas</h4>
+                <div class="metric" id="openRequests">--</div>
+                <div class="small">Solicitações pendentes</div>
+              </div>
+
+              <div class="card wide">
+                <h4>Monitoramento de Lucros (últimos 6 meses)</h4>
+                <canvas id="profitChart"></canvas>
+              </div>
+
+              <div class="card">
+                <h4>Atividades próximas</h4>
+                <div id="nextActivities" class="list"></div>
+              </div>
+
+              <div class="card">
+                <h4>Últimas requisições</h4>
+                <div id="recentRequests" class="list"></div>
+              </div>
+
+              <div class="card">
+                <h4>Notícias do Setor</h4>
+                <iframe
+                  src="https://www.google.com/search?igu=1&ei=&q=not%C3%ADcias+pequenas+empresas+brasil&oq=not%C3%ADcias+pequenas+empresas&gs_lp=Egxnd3Mtd2l6LXNlcnAiH25vdMOtY2lhcyBwZXF1ZW5hcyBlbXByZXNhcyBicmFzaWwqAggAMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBhAAGBYYHjIGEAAYFhgeMgYQABgWGB4yBhAAGBYYHjIGEAAYFhgeSPASUPEDWPEDcAF4AJABAJgBhQGgAYUBqgEDMC4xuAEDyAEA-AEC-AEBmAICoAKMAaoCC2d3cy13aXotc2VycMICChAAGLADGNYEGEeYAwCIBgGQBgiSBwMxLjGgB9MC&sclient=gws-wiz-serp&ibp=htl;news"
+                  title="Notícias"
+                ></iframe>
+              </div>
+
+              <div class="card">
+                <h4>Localização da Empresa</h4>
+                <div id="map"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Funcionários -->
+          <section id="funcionarios" class="section" style="display: none">
             <div class="card">
-              <h4>Presenças (hoje)</h4>
-              <div style="display:flex;align-items:center;gap:12px">
-                <canvas id="presencaChart"></canvas>
-                <div>
-                  <div class="metric" id="presentCount">--</div>
-                  <div class="small">Presentes / Ausentes</div>
+              <h4>Cadastro e Gerência de Funcionários</h4>
+              <div
+                style="
+                  margin-top: 10px;
+                  margin-bottom: 10px;
+                  display: flex;
+                  gap: 8px;
+                  align-items: center;
+                "
+              >
+                <input
+                  id="searchEmployee"
+                  placeholder="Pesquisar por nome ou cargo"
+                />
+                <button class="btn" id="refreshEmployees">Atualizar</button>
+              </div>
+
+              <table id="employeesTable">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Cargo</th>
+                    <th>Salário</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- Cronograma -->
+          <section id="cronograma" class="section" style="display: none">
+            <div class="grid">
+              <div class="card wide">
+                <h4>Cronograma de Atividades</h4>
+                <div style="margin-bottom: 12px">
+                  <a
+                    href="https://calendar.google.com"
+                    target="_blank"
+                    class="btn"
+                    style="display: inline-block; text-decoration: none"
+                    >📅 Abrir Google Agenda</a
+                  >
+                </div>
+                <div
+                  id="scheduleList"
+                  class="list"
+                  style="margin-top: 10px"
+                ></div>
+                <div style="margin-top: 10px; display: flex; gap: 8px">
+                  <input
+                    id="activityText"
+                    placeholder="Nova atividade (descrição)"
+                  />
+                  <input id="activityDate" type="date" />
+                  <button class="btn" id="addActivityBtn">Adicionar</button>
                 </div>
               </div>
             </div>
+          </section>
 
+          <!-- Requisições -->
+          <section id="requisicoes" class="section" style="display: none">
             <div class="card">
-              <h4>Funcionários</h4>
-              <div class="metric" id="totalEmployees">--</div>
-              <div class="small">Total de colaboradores cadastrados</div>
-            </div>
-
-            <div class="card">
-              <h4>Requisições Abertas</h4>
-              <div class="metric" id="openRequests">--</div>
-              <div class="small">Solicitações pendentes</div>
-            </div>
-
-            <div class="card wide">
-              <h4>Monitoramento de Lucros (últimos 6 meses)</h4>
-              <canvas id="profitChart"></canvas>
-            </div>
-
-            <div class="card">
-              <h4>Atividades próximas</h4>
-              <div id="nextActivities" class="list"></div>
-            </div>
-
-            <div class="card">
-              <h4>Últimas requisições</h4>
-              <div id="recentRequests" class="list"></div>
-            </div>
-
-            <div class="card">
-              <h4>Notícias do Setor</h4>
-              <iframe src="https://www.google.com/search?igu=1&ei=&q=not%C3%ADcias+pequenas+empresas+brasil&oq=not%C3%ADcias+pequenas+empresas&gs_lp=Egxnd3Mtd2l6LXNlcnAiH25vdMOtY2lhcyBwZXF1ZW5hcyBlbXByZXNhcyBicmFzaWwqAggAMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBhAAGBYYHjIGEAAYFhgeMgYQABgWGB4yBhAAGBYYHjIGEAAYFhgeSPASUPEDWPEDcAF4AJABAJgBhQGgAYUBqgEDMC4xuAEDyAEA-AEC-AEBmAICoAKMAaoCC2d3cy13aXotc2VycMICChAAGLADGNYEGEeYAwCIBgGQBgiSBwMxLjGgB9MC&sclient=gws-wiz-serp&ibp=htl;news" title="Notícias"></iframe>
-            </div>
-
-            <div class="card">
-              <h4>Localização da Empresa</h4>
-              <div id="map"></div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Funcionários -->
-        <section id="funcionarios" class="section" style="display:none">
-          <div class="card">
-            <h4>Cadastro e Gerência de Funcionários</h4>
-            <div style="margin-top:10px;margin-bottom:10px;display:flex;gap:8px;align-items:center">
-              <input id="searchEmployee" placeholder="Pesquisar por nome ou cargo" />
-              <button class="btn" id="refreshEmployees">Atualizar</button>
-            </div>
-
-            <table id="employeesTable">
-              <thead>
-                <tr><th>Nome</th><th>Cargo</th><th>Salário</th><th>Ações</th></tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </section>
-
-        <!-- Cronograma -->
-        <section id="cronograma" class="section" style="display:none">
-          <div class="grid">
-            <div class="card wide">
-              <h4>Cronograma de Atividades</h4>
-              <div style="margin-bottom:12px">
-                <a href="https://calendar.google.com" target="_blank" class="btn" style="display:inline-block;text-decoration:none">📅 Abrir Google Agenda</a>
+              <h4>Controle de Requisições</h4>
+              <div style="margin-top: 8px; display: flex; gap: 8px">
+                <input id="requestText" placeholder="Descrição da requisição" />
+                <select id="requestType">
+                  <option>Material</option>
+                  <option>Serviço</option>
+                  <option>Outros</option>
+                </select>
+                <button class="btn" id="addRequestBtn">Enviar</button>
               </div>
-              <div id="scheduleList" class="list" style="margin-top:10px"></div>
-              <div style="margin-top:10px;display:flex;gap:8px">
-                <input id="activityText" placeholder="Nova atividade (descrição)" />
-                <input id="activityDate" type="date" />
-                <button class="btn" id="addActivityBtn">Adicionar</button>
+              <div style="margin-top: 12px">
+                <ul id="requestsList" style="padding-left: 16px"></ul>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <!-- Requisições -->
-        <section id="requisicoes" class="section" style="display:none">
-          <div class="card">
-            <h4>Controle de Requisições</h4>
-            <div style="margin-top:8px;display:flex;gap:8px">
-              <input id="requestText" placeholder="Descrição da requisição" />
-              <select id="requestType"><option>Material</option><option>Serviço</option><option>Outros</option></select>
-              <button class="btn" id="addRequestBtn">Enviar</button>
-            </div>
-            <div style="margin-top:12px">
-              <ul id="requestsList" style="padding-left:16px"></ul>
-            </div>
-          </div>
-        </section>
-
-        <!-- Financeiro -->
-        <section id="financeiro" class="section" style="display:none">
-          <div class="grid">
-            <div class="card wide">
-              <h4>Visão Financeira</h4>
-              <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
-                <input id="revenueMonth" placeholder="Receita do mês (R$)" type="number" />
-                <input id="expenseMonth" placeholder="Despesas do mês (R$)" type="number" />
-                <button class="btn" id="addFinanceBtn">Registrar</button>
+          <!-- Financeiro -->
+          <section id="financeiro" class="section" style="display: none">
+            <div class="grid">
+              <div class="card wide">
+                <h4>Visão Financeira</h4>
+                <div
+                  style="
+                    display: flex;
+                    gap: 8px;
+                    align-items: center;
+                    margin-bottom: 8px;
+                  "
+                >
+                  <input
+                    id="revenueMonth"
+                    placeholder="Receita do mês (R$)"
+                    type="number"
+                  />
+                  <input
+                    id="expenseMonth"
+                    placeholder="Despesas do mês (R$)"
+                    type="number"
+                  />
+                  <button class="btn" id="addFinanceBtn">Registrar</button>
+                </div>
+                <div id="financeLog" class="list"></div>
               </div>
-              <div id="financeLog" class="list"></div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <footer>Arquivo front-end estático — abra este HTML no navegador. Dados persistem localmente (localStorage).</footer>
-      </main>
+          <!-- Ponto Eletrônico -->
+          <section id="ponto" class="section" style="display: none">
+            <div class="ponto-container">
+              <div class="clock-header">
+                <div class="current-time" id="currentTime">00:00:00</div>
+                <div class="current-date" id="currentDate">Carregando...</div>
+              </div>
+
+              <div id="mensagem" class="message"></div>
+
+              <div class="ponto-card">
+                <div class="status-atual" id="statusAtual">
+                  <h2>Carregando...</h2>
+                  <span class="status-badge fora">Aguarde</span>
+                </div>
+
+                <div class="registros-hoje">
+                  <div class="registro-item">
+                    <div class="label">Entrada</div>
+                    <div class="hora" id="horaEntrada">--:--</div>
+                  </div>
+                  <div class="registro-item">
+                    <div class="label">Saída Almoço</div>
+                    <div class="hora" id="horaSaidaAlmoco">--:--</div>
+                  </div>
+                  <div class="registro-item">
+                    <div class="label">Volta Almoço</div>
+                    <div class="hora" id="horaVoltaAlmoco">--:--</div>
+                  </div>
+                  <div class="registro-item">
+                    <div class="label">Saída</div>
+                    <div class="hora" id="horaSaida">--:--</div>
+                  </div>
+                </div>
+
+                <div class="botoes-acao">
+                  <button
+                    class="btn-ponto btn-entrada"
+                    id="btnEntrada"
+                    disabled
+                  >
+                    📥 Registrar Entrada
+                  </button>
+                  <button
+                    class="btn-ponto btn-saida-almoco"
+                    id="btnSaidaAlmoco"
+                    disabled
+                  >
+                    🍽️ Saída para Almoço
+                  </button>
+                  <button
+                    class="btn-ponto btn-volta-almoco"
+                    id="btnVoltaAlmoco"
+                    disabled
+                  >
+                    ↩️ Volta do Almoço
+                  </button>
+                  <button class="btn-ponto btn-saida" id="btnSaida" disabled>
+                    📤 Registrar Saída
+                  </button>
+                </div>
+              </div>
+
+              <div class="historico">
+                <h3>📅 Últimos Registros</h3>
+                <div id="historicoLista">
+                  <div style="text-align: center; color: #666; padding: 40px">
+                    Carregando histórico...
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
     </div>
-  </div>
 
-  <!-- Modal (simples) -->
-  <div id="modal" style="position:fixed;inset:0;background:rgba(2,6,23,0.5);display:none;align-items:center;justify-content:center;padding:20px">
-    <div style="width:100%;max-width:520px;background:var(--card);padding:18px;border-radius:12px">
-      <h3 id="modalTitle">Novo Funcionário</h3>
-      <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
-        <input id="empName" placeholder="Nome" />
-        <input id="empRole" placeholder="Cargo" />
-        <input id="empSalary" placeholder="Salário (R$)" type="number" />
-        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:6px">
-          <button class="btn ghost" id="closeModal">Cancelar</button>
-          <button class="btn" id="saveEmployee">Salvar</button>
+    <!-- Modal (simples) -->
+    <div
+      id="modal"
+      style="
+        position: fixed;
+        inset: 0;
+        background: rgba(2, 6, 23, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      "
+    >
+      <div
+        style="
+          width: 100%;
+          max-width: 520px;
+          background: var(--card);
+          padding: 18px;
+          border-radius: 12px;
+        "
+      >
+        <h3 id="modalTitle">Novo Funcionário</h3>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+          "
+        >
+          <input id="empName" placeholder="Nome" />
+          <input id="empRole" placeholder="Cargo" />
+          <input id="empSalary" placeholder="Salário (R$)" type="number" />
+          <div
+            style="
+              display: flex;
+              justify-content: flex-end;
+              gap: 8px;
+              margin-top: 6px;
+            "
+          >
+            <button class="btn ghost" id="closeModal">Cancelar</button>
+            <button class="btn" id="saveEmployee">Salvar</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <script>
-    // ===== Dados iniciais (mock) =====
-    const STORAGE_KEYS = {EMP:'me_employees', REQ:'me_requests', ACT:'me_activities', FIN:'me_finance'};
-    const sampleEmployees = [
-      {id:1,name:'Ana Souza',role:'Gerente',salary:3200,present:true},
-      {id:2,name:'João Silva',role:'Atendente',salary:1800,present:false},
-      {id:3,name:'Lucas Lima',role:'Auxiliar',salary:1500,present:true}
-    ];
+  
+    <script>
 
-    // util
-    const $ = (sel,root=document)=>root.querySelector(sel);
+      
+      // ===== Dados iniciais (mock) =====
+      const STORAGE_KEYS = {
+        EMP: "me_employees",
+        REQ: "me_requests",
+        ACT: "me_activities",
+        FIN: "me_finance",
+      };
+      const sampleEmployees = [
+        {
+          id: 1,
+          name: "Ana Souza",
+          role: "Gerente",
+          salary: 3200,
+          present: true,
+        },
+        {
+          id: 2,
+          name: "João Silva",
+          role: "Atendente",
+          salary: 1800,
+          present: false,
+        },
+        {
+          id: 3,
+          name: "Lucas Lima",
+          role: "Auxiliar",
+          salary: 1500,
+          present: true,
+        },
+      ];
 
-    function load(key, fallback){try{const s=localStorage.getItem(key);return s?JSON.parse(s):fallback}catch(e){return fallback}}
-    function save(key,val){localStorage.setItem(key,JSON.stringify(val))}
+      // util
+      const $ = (sel, root = document) => root.querySelector(sel);
 
-    // inicializar dados se vazio
-    if(!localStorage.getItem(STORAGE_KEYS.EMP)) save(STORAGE_KEYS.EMP, sampleEmployees);
-    if(!localStorage.getItem(STORAGE_KEYS.REQ)) save(STORAGE_KEYS.REQ, [{id:1,text:'Compra de papel',type:'Material',status:'aberto'}]);
-    if(!localStorage.getItem(STORAGE_KEYS.ACT)) save(STORAGE_KEYS.ACT, [{id:1,text:'Reunião mensal',date: new Date().toISOString().slice(0,10)}]);
-    if(!localStorage.getItem(STORAGE_KEYS.FIN)) save(STORAGE_KEYS.FIN, []);
-
-    // ===== Charts =====
-    let presencaChart, profitChart;
-    function buildCharts(){
-      const employees = load(STORAGE_KEYS.EMP,[]);
-      const present = employees.filter(e=>e.present).length;
-      const absent = employees.length - present;
-      const ctx = document.getElementById('presencaChart').getContext('2d');
-      if(presencaChart) presencaChart.destroy();
-      presencaChart = new Chart(ctx,{
-        type:'doughnut',data:{labels:['Presentes','Ausentes'],datasets:[{data:[present,absent],backgroundColor:['#16a34a','#ef4444']}]} ,options:{plugins:{legend:{position:'bottom'}}}
-      });
-
-      // profit example (últimos 6 meses)
-      const months = [];
-      for(let i=5;i>=0;i--){const d=new Date();d.setMonth(d.getMonth()-i);months.push(d.toLocaleString('pt-BR',{month:'short',year:'2-digit'}))}
-      const finances = load(STORAGE_KEYS.FIN,[]);
-      // Agrega receita - despesa por mês (mock se vazio)
-      const data = months.map(m=>{
-        // procurar valor no storage
-        const found = finances.find(f=>f.month===m);
-        if(found) return found.revenue - found.expense;
-        // criar mock pequeno
-        return Math.round((Math.random()*5000)-1500);
-      });
-      const pctx = document.getElementById('profitChart').getContext('2d');
-      if(profitChart) profitChart.destroy();
-      profitChart = new Chart(pctx,{type:'line',data:{labels:months,datasets:[{label:'Lucro (R$)',data:data,fill:true,tension:0.3}]},options:{plugins:{legend:{display:false}}}});
-
-      // atualizar pequenos indicadores
-      $('#presentCount').textContent = `${present} / ${absent}`;
-      $('#totalEmployees').textContent = employees.length;
-      $('#openRequests').textContent = load(STORAGE_KEYS.REQ,[]).filter(r=>r.status==='aberto').length;
-    }
-
-    // ===== Render UI =====
-    function renderEmployees(filter=''){
-      const t = $('#employeesTable tbody'); t.innerHTML='';
-      const employees = load(STORAGE_KEYS.EMP,[]).filter(e=> (e.name+e.role).toLowerCase().includes(filter.toLowerCase()));
-      employees.forEach(e=>{
-        const tr=document.createElement('tr');
-        tr.innerHTML = `<td>${e.name}</td><td>${e.role}</td><td>R$ ${Number(e.salary).toFixed(2)}</td><td class='actions'>
-          <button class='btn ghost' data-id='${e.id}' data-act='toggle'>${e.present? 'Marcar Ausente':'Marcar Presente'}</button>
-          <button class='btn' data-id='${e.id}' data-act='delete'>Remover</button></td>`;
-        t.appendChild(tr);
-      });
-    }
-
-    function renderActivities(){
-      const el = $('#scheduleList'); el.innerHTML='';
-      const acts = load(STORAGE_KEYS.ACT,[]).sort((a,b)=>a.date.localeCompare(b.date));
-      acts.forEach(a=>{
-        const div = document.createElement('div'); div.innerHTML = `<strong>${a.date}</strong> — ${a.text}`; el.appendChild(div);
-      });
-      // próximas
-      $('#nextActivities').innerHTML = acts.slice(0,3).map(a=>`<div><strong>${a.date}</strong><div class='small'>${a.text}</div></div>`).join('') || '<div class="small">Nenhuma atividade</div>';
-    }
-
-    function renderRequests(){
-      const list = $('#requestsList'); list.innerHTML='';
-      const recent = $('#recentRequests'); recent.innerHTML='';
-      const reqs = load(STORAGE_KEYS.REQ,[]).slice().reverse();
-      reqs.forEach(r=>{
-        const li=document.createElement('li');
-        li.innerHTML = `${r.text} <small class='small'>(${r.type})</small> — <em>${r.status}</em> <button class='btn ghost' data-id='${r.id}' data-act='close'>Fechar</button>`;
-        list.appendChild(li);
-      });
-      recent.innerHTML = reqs.slice(0,3).map(r=>`<div>${r.text} <div class='small'>${r.type} — ${r.status}</div></div>`).join('') || '<div class="small">Nenhuma requisição</div>';
-    }
-
-    function renderFinanceLog(){
-      const container = $('#financeLog'); container.innerHTML='';
-      const fin = load(STORAGE_KEYS.FIN,[]).slice().reverse();
-      if(!fin.length) container.innerHTML='<div class="small">Nenhum registro financeiro</div>';
-      fin.forEach(f=>{
-        const d = document.createElement('div'); d.innerHTML = `<strong>${f.month}</strong> — Receita R$ ${Number(f.revenue).toFixed(2)} — Despesa R$ ${Number(f.expense).toFixed(2)} <div class='small'>Lucro R$ ${Number(f.revenue - f.expense).toFixed(2)}</div>`; container.appendChild(d);
-      });
-    }
-
-    // eventos
-    document.addEventListener('click', (e)=>{
-      const btn = e.target.closest('button');
-      if(!btn) return;
-      if(btn.id==='addEmployeeBtn'){ openModal(); }
-      if(btn.id==='closeModal'){ closeModal(); }
-      if(btn.id==='saveEmployee'){ saveEmployee(); }
-      if(btn.dataset && btn.dataset.act==='toggle'){ const id=Number(btn.dataset.id); togglePresent(id); }
-      if(btn.dataset && btn.dataset.act==='delete'){ const id=Number(btn.dataset.id); deleteEmployee(id); }
-      if(btn.dataset && btn.dataset.act==='close'){ const id=Number(btn.dataset.id); closeRequest(id); }
-      if(btn.id==='refreshEmployees'){ renderEmployees($('#searchEmployee').value); }
-      if(btn.id==='addActivityBtn'){ addActivity(); }
-      if(btn.id==='addRequestBtn'){ addRequest(); }
-      if(btn.id==='addFinanceBtn'){ addFinance(); }
-    });
-
-    // modal functions
-    function openModal(emp){
-      $('#modal').style.display='flex';
-      $('#modalTitle').textContent = emp? 'Editar Funcionário':'Novo Funcionário';
-      $('#empName').value = emp? emp.name : '';
-      $('#empRole').value = emp? emp.role : '';
-      $('#empSalary').value = emp? emp.salary : '';
-      $('#saveEmployee').dataset.editId = emp? emp.id : '';
-    }
-    function closeModal(){ $('#modal').style.display='none'; }
-
-    function saveEmployee(){
-      const name = $('#empName').value.trim(); const role = $('#empRole').value.trim(); const salary = Number($('#empSalary').value || 0);
-      if(!name || !role) return alert('Preencha nome e cargo.');
-      const employees = load(STORAGE_KEYS.EMP,[]);
-      const editId = $('#saveEmployee').dataset.editId;
-      if(editId){
-        const idx = employees.findIndex(e=>e.id==editId);
-        if(idx>=0){ employees[idx].name=name; employees[idx].role=role; employees[idx].salary=salary; }
-      } else {
-        const id = employees.length? Math.max(...employees.map(e=>e.id))+1 : 1;
-        employees.push({id,name,role,salary,present:false});
+      function load(key, fallback) {
+        try {
+          const s = localStorage.getItem(key);
+          return s ? JSON.parse(s) : fallback;
+        } catch (e) {
+          return fallback;
+        }
       }
-      save(STORAGE_KEYS.EMP,employees); closeModal(); renderAll();
-    }
+      function save(key, val) {
+        localStorage.setItem(key, JSON.stringify(val));
+      }
 
-    // employees actions
-    function togglePresent(id){ const employees = load(STORAGE_KEYS.EMP,[]); const idx = employees.findIndex(e=>e.id===id); if(idx<0) return; employees[idx].present = !employees[idx].present; save(STORAGE_KEYS.EMP,employees); renderAll(); }
-    function deleteEmployee(id){ if(!confirm('Remover funcionário?')) return; const employees = load(STORAGE_KEYS.EMP,[]).filter(e=>e.id!==id); save(STORAGE_KEYS.EMP,employees); renderAll(); }
+      // inicializar dados se vazio
+      if (!localStorage.getItem(STORAGE_KEYS.EMP))
+        save(STORAGE_KEYS.EMP, sampleEmployees);
+      if (!localStorage.getItem(STORAGE_KEYS.REQ))
+        save(STORAGE_KEYS.REQ, [
+          {
+            id: 1,
+            text: "Compra de papel",
+            type: "Material",
+            status: "aberto",
+          },
+        ]);
+      if (!localStorage.getItem(STORAGE_KEYS.ACT))
+        save(STORAGE_KEYS.ACT, [
+          {
+            id: 1,
+            text: "Reunião mensal",
+            date: new Date().toISOString().slice(0, 10),
+          },
+        ]);
+      if (!localStorage.getItem(STORAGE_KEYS.FIN)) save(STORAGE_KEYS.FIN, []);
 
-    // activities
-    function addActivity(){ const text = $('#activityText').value.trim(); const date = $('#activityDate').value; if(!text||!date) return alert('Informe data e descrição'); const acts = load(STORAGE_KEYS.ACT,[]); const id = acts.length? Math.max(...acts.map(a=>a.id))+1:1; acts.push({id,text,date}); save(STORAGE_KEYS.ACT,acts); $('#activityText').value=''; $('#activityDate').value=''; renderAll(); }
+      // ===== Charts =====
+      let presencaChart, profitChart;
+      function buildCharts() {
+        const employees = load(STORAGE_KEYS.EMP, []);
+        const present = employees.filter((e) => e.present).length;
+        const absent = employees.length - present;
+        const ctx = document.getElementById("presencaChart").getContext("2d");
+        if (presencaChart) presencaChart.destroy();
+        presencaChart = new Chart(ctx, {
+          type: "doughnut",
+          data: {
+            labels: ["Presentes", "Ausentes"],
+            datasets: [
+              {
+                data: [present, absent],
+                backgroundColor: ["#16a34a", "#ef4444"],
+              },
+            ],
+          },
+          options: { plugins: { legend: { position: "bottom" } } },
+        });
 
-    // requests
-    function addRequest(){ const text=$('#requestText').value.trim(); const type=$('#requestType').value; if(!text) return alert('Descreva a requisição'); const reqs=load(STORAGE_KEYS.REQ,[]); const id=reqs.length?Math.max(...reqs.map(r=>r.id))+1:1; reqs.push({id,text,type,status:'aberto'}); save(STORAGE_KEYS.REQ,reqs); $('#requestText').value=''; renderAll(); }
-    function closeRequest(id){ const reqs=load(STORAGE_KEYS.REQ,[]); const idx=reqs.findIndex(r=>r.id===id); if(idx<0) return; reqs[idx].status='fechado'; save(STORAGE_KEYS.REQ,reqs); renderAll(); }
+        // profit example (últimos 6 meses)
+        const months = [];
+        for (let i = 5; i >= 0; i--) {
+          const d = new Date();
+          d.setMonth(d.getMonth() - i);
+          months.push(
+            d.toLocaleString("pt-BR", { month: "short", year: "2-digit" })
+          );
+        }
+        const finances = load(STORAGE_KEYS.FIN, []);
+        // Agrega receita - despesa por mês (mock se vazio)
+        const data = months.map((m) => {
+          // procurar valor no storage
+          const found = finances.find((f) => f.month === m);
+          if (found) return found.revenue - found.expense;
+          // criar mock pequeno
+          return Math.round(Math.random() * 5000 - 1500);
+        });
+        const pctx = document.getElementById("profitChart").getContext("2d");
+        if (profitChart) profitChart.destroy();
+        profitChart = new Chart(pctx, {
+          type: "line",
+          data: {
+            labels: months,
+            datasets: [
+              { label: "Lucro (R$)", data: data, fill: true, tension: 0.3 },
+            ],
+          },
+          options: { plugins: { legend: { display: false } } },
+        });
 
-    // finance
-    function addFinance(){ const rev = Number($('#revenueMonth').value||0); const exp = Number($('#expenseMonth').value||0); const now = new Date(); const month = now.toLocaleString('pt-BR',{month:'short',year:'2-digit'}); const fin = load(STORAGE_KEYS.FIN,[]); fin.push({month,revenue:rev,expense:exp}); save(STORAGE_KEYS.FIN,fin); $('#revenueMonth').value=''; $('#expenseMonth').value=''; renderAll(); }
+        // atualizar pequenos indicadores
+        $("#presentCount").textContent = `${present} / ${absent}`;
+        $("#totalEmployees").textContent = employees.length;
+        $("#openRequests").textContent = load(STORAGE_KEYS.REQ, []).filter(
+          (r) => r.status === "aberto"
+        ).length;
+      }
 
-    // menu nav
-    document.querySelectorAll('nav a').forEach(a=>a.addEventListener('click', (ev)=>{
-      ev.preventDefault(); document.querySelectorAll('nav a').forEach(x=>x.classList.remove('active')); a.classList.add('active');
-      document.querySelectorAll('.section').forEach(s=>s.style.display='none'); document.getElementById(a.dataset.section).style.display='block';
-      buildCharts();
-    }));
+      // ===== Render UI =====
+      function renderEmployees(filter = "") {
+        const t = $("#employeesTable tbody");
+        t.innerHTML = "";
+        const employees = load(STORAGE_KEYS.EMP, []).filter((e) =>
+          (e.name + e.role).toLowerCase().includes(filter.toLowerCase())
+        );
+        employees.forEach((e) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `<td>${e.name}</td><td>${e.role}</td><td>R$ ${Number(
+            e.salary
+          ).toFixed(2)}</td><td class='actions'>
+          <button class='btn ghost' data-id='${e.id}' data-act='toggle'>${
+            e.present ? "Marcar Ausente" : "Marcar Presente"
+          }</button>
+          <button class='btn' data-id='${
+            e.id
+          }' data-act='delete'>Remover</button></td>`;
+          t.appendChild(tr);
+        });
+      }
 
-    // search live
-    $('#searchEmployee').addEventListener('input', e=>renderEmployees(e.target.value));
+      function renderActivities() {
+        const el = $("#scheduleList");
+        el.innerHTML = "";
+        const acts = load(STORAGE_KEYS.ACT, []).sort((a, b) =>
+          a.date.localeCompare(b.date)
+        );
+        acts.forEach((a) => {
+          const div = document.createElement("div");
+          div.innerHTML = `<strong>${a.date}</strong> — ${a.text}`;
+          el.appendChild(div);
+        });
+        // próximas
+        $("#nextActivities").innerHTML =
+          acts
+            .slice(0, 3)
+            .map(
+              (a) =>
+                `<div><strong>${a.date}</strong><div class='small'>${a.text}</div></div>`
+            )
+            .join("") || '<div class="small">Nenhuma atividade</div>';
+      }
 
-    // render everything
-    function renderAll(){ renderEmployees(); renderActivities(); renderRequests(); renderFinanceLog(); buildCharts(); updateHeaderStats(); }
-    renderAll();
+      function renderRequests() {
+        const list = $("#requestsList");
+        list.innerHTML = "";
+        const recent = $("#recentRequests");
+        recent.innerHTML = "";
+        const reqs = load(STORAGE_KEYS.REQ, []).slice().reverse();
+        reqs.forEach((r) => {
+          const li = document.createElement("li");
+          li.innerHTML = `${r.text} <small class='small'>(${r.type})</small> — <em>${r.status}</em> <button class='btn ghost' data-id='${r.id}' data-act='close'>Fechar</button>`;
+          list.appendChild(li);
+        });
+        recent.innerHTML =
+          reqs
+            .slice(0, 3)
+            .map(
+              (r) =>
+                `<div>${r.text} <div class='small'>${r.type} — ${r.status}</div></div>`
+            )
+            .join("") || '<div class="small">Nenhuma requisição</div>';
+      }
 
-    // update header stats
-    function updateHeaderStats(){
-      const employees = load(STORAGE_KEYS.EMP,[]);
-      $('#headerEmployeeCount').textContent = employees.length;
-    }
+      function renderFinanceLog() {
+        const container = $("#financeLog");
+        container.innerHTML = "";
+        const fin = load(STORAGE_KEYS.FIN, []).slice().reverse();
+        if (!fin.length)
+          container.innerHTML =
+            '<div class="small">Nenhum registro financeiro</div>';
+        fin.forEach((f) => {
+          const d = document.createElement("div");
+          d.innerHTML = `<strong>${f.month}</strong> — Receita R$ ${Number(
+            f.revenue
+          ).toFixed(2)} — Despesa R$ ${Number(f.expense).toFixed(
+            2
+          )} <div class='small'>Lucro R$ ${Number(
+            f.revenue - f.expense
+          ).toFixed(2)}</div>`;
+          container.appendChild(d);
+        });
+      }
 
-    // initialize map
-    function initMap(){
-      if(!document.getElementById('map')) return;
-      const map = L.map('map').setView([-24.7136, -53.7431], 14); // Toledo, PR
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-      }).addTo(map);
-      L.marker([-24.7136, -53.7431]).addTo(map)
-        .bindPopup('<b>MicroEmpresas Ltda.</b><br>Rua das Flores, 123')
-        .openPopup();
-    }
-    setTimeout(initMap, 500);
+      // eventos
+      document.addEventListener("click", (e) => {
+        const btn = e.target.closest("button");
+        if (!btn) return;
+        if (btn.id === "addEmployeeBtn") {
+          openModal();
+        }
+        if (btn.id === "closeModal") {
+          closeModal();
+        }
+        if (btn.id === "saveEmployee") {
+          saveEmployee();
+        }
+        if (btn.dataset && btn.dataset.act === "toggle") {
+          const id = Number(btn.dataset.id);
+          togglePresent(id);
+        }
+        if (btn.dataset && btn.dataset.act === "delete") {
+          const id = Number(btn.dataset.id);
+          deleteEmployee(id);
+        }
+        if (btn.dataset && btn.dataset.act === "close") {
+          const id = Number(btn.dataset.id);
+          closeRequest(id);
+        }
+        if (btn.id === "refreshEmployees") {
+          renderEmployees($("#searchEmployee").value);
+        }
+        if (btn.id === "addActivityBtn") {
+          addActivity();
+        }
+        if (btn.id === "addRequestBtn") {
+          addRequest();
+        }
+        if (btn.id === "addFinanceBtn") {
+          addFinance();
+        }
+      });
 
-    // expose open modal by double click on header logo
-    document.querySelector('.logo').addEventListener('dblclick', ()=>openModal());
-  </script>
-</body>
+      // modal functions
+      function openModal(emp) {
+        $("#modal").style.display = "flex";
+        $("#modalTitle").textContent = emp
+          ? "Editar Funcionário"
+          : "Novo Funcionário";
+        $("#empName").value = emp ? emp.name : "";
+        $("#empRole").value = emp ? emp.role : "";
+        $("#empSalary").value = emp ? emp.salary : "";
+        $("#saveEmployee").dataset.editId = emp ? emp.id : "";
+      }
+      function closeModal() {
+        $("#modal").style.display = "none";
+      }
+
+      function saveEmployee() {
+        const name = $("#empName").value.trim();
+        const role = $("#empRole").value.trim();
+        const salary = Number($("#empSalary").value || 0);
+        if (!name || !role) return alert("Preencha nome e cargo.");
+        const employees = load(STORAGE_KEYS.EMP, []);
+        const editId = $("#saveEmployee").dataset.editId;
+        if (editId) {
+          const idx = employees.findIndex((e) => e.id == editId);
+          if (idx >= 0) {
+            employees[idx].name = name;
+            employees[idx].role = role;
+            employees[idx].salary = salary;
+          }
+        } else {
+          const id = employees.length
+            ? Math.max(...employees.map((e) => e.id)) + 1
+            : 1;
+          employees.push({ id, name, role, salary, present: false });
+        }
+        save(STORAGE_KEYS.EMP, employees);
+        closeModal();
+        renderAll();
+      }
+
+      // employees actions
+      function togglePresent(id) {
+        const employees = load(STORAGE_KEYS.EMP, []);
+        const idx = employees.findIndex((e) => e.id === id);
+        if (idx < 0) return;
+        employees[idx].present = !employees[idx].present;
+        save(STORAGE_KEYS.EMP, employees);
+        renderAll();
+      }
+      function deleteEmployee(id) {
+        if (!confirm("Remover funcionário?")) return;
+        const employees = load(STORAGE_KEYS.EMP, []).filter((e) => e.id !== id);
+        save(STORAGE_KEYS.EMP, employees);
+        renderAll();
+      }
+
+      // activities
+      function addActivity() {
+        const text = $("#activityText").value.trim();
+        const date = $("#activityDate").value;
+        if (!text || !date) return alert("Informe data e descrição");
+        const acts = load(STORAGE_KEYS.ACT, []);
+        const id = acts.length ? Math.max(...acts.map((a) => a.id)) + 1 : 1;
+        acts.push({ id, text, date });
+        save(STORAGE_KEYS.ACT, acts);
+        $("#activityText").value = "";
+        $("#activityDate").value = "";
+        renderAll();
+      }
+
+      // requests
+      function addRequest() {
+        const text = $("#requestText").value.trim();
+        const type = $("#requestType").value;
+        if (!text) return alert("Descreva a requisição");
+        const reqs = load(STORAGE_KEYS.REQ, []);
+        const id = reqs.length ? Math.max(...reqs.map((r) => r.id)) + 1 : 1;
+        reqs.push({ id, text, type, status: "aberto" });
+        save(STORAGE_KEYS.REQ, reqs);
+        $("#requestText").value = "";
+        renderAll();
+      }
+      function closeRequest(id) {
+        const reqs = load(STORAGE_KEYS.REQ, []);
+        const idx = reqs.findIndex((r) => r.id === id);
+        if (idx < 0) return;
+        reqs[idx].status = "fechado";
+        save(STORAGE_KEYS.REQ, reqs);
+        renderAll();
+      }
+
+      // finance
+      function addFinance() {
+        const rev = Number($("#revenueMonth").value || 0);
+        const exp = Number($("#expenseMonth").value || 0);
+        const now = new Date();
+        const month = now.toLocaleString("pt-BR", {
+          month: "short",
+          year: "2-digit",
+        });
+        const fin = load(STORAGE_KEYS.FIN, []);
+        fin.push({ month, revenue: rev, expense: exp });
+        save(STORAGE_KEYS.FIN, fin);
+        $("#revenueMonth").value = "";
+        $("#expenseMonth").value = "";
+        renderAll();
+      }
+
+      // menu nav
+      document.querySelectorAll("nav a").forEach((a) =>
+        a.addEventListener("click", (ev) => {
+          ev.preventDefault();
+          document
+            .querySelectorAll("nav a")
+            .forEach((x) => x.classList.remove("active"));
+          a.classList.add("active");
+          document
+            .querySelectorAll(".section")
+            .forEach((s) => (s.style.display = "none"));
+          document.getElementById(a.dataset.section).style.display = "block";
+          buildCharts();
+        })
+      );
+
+      // search live
+      $("#searchEmployee").addEventListener("input", (e) =>
+        renderEmployees(e.target.value)
+      );
+
+      // render everything
+      function renderAll() {
+        renderEmployees();
+        renderActivities();
+        renderRequests();
+        renderFinanceLog();
+        buildCharts();
+        updateHeaderStats();
+      }
+      renderAll();
+
+      // update header stats
+      function updateHeaderStats() {
+        const employees = load(STORAGE_KEYS.EMP, []);
+        $("#headerEmployeeCount").textContent = employees.length;
+      }
+
+      // initialize map
+      function initMap() {
+        if (!document.getElementById("map")) return;
+        const map = L.map("map").setView([-24.7136, -53.7431], 14); // Toledo, PR
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: "© OpenStreetMap contributors",
+        }).addTo(map);
+        L.marker([-24.7136, -53.7431])
+          .addTo(map)
+          .bindPopup("<b>MicroEmpresas Ltda.</b><br>Rua das Flores, 123")
+          .openPopup();
+      }
+      setTimeout(initMap, 500);
+
+      
+    </script>
+  </body>
+</html>

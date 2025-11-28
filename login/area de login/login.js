@@ -16,6 +16,6 @@ form.addEventListener("submit", async (e) => {
   if (error) {
     alert("Login inválido: " + error.message);
   } else {
-    window.location.href = "../../AreadeTrabalho/Area de trabalho/Area de trabalho.html";
+    window.location.href = "../../header.html";
   }
 });
