@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Criar Empresa</title>
+  <link rel="stylesheet" href="criarEmpresas.css">
+  <script type="module" src="criarEmpresas.js"></script>
+ 
 
   <!-- Supabase -->
   <script type="module" src="/js/supabaseClient.js"></script>
@@ -16,20 +19,43 @@
 </head>
 <body>
 
-  <h2>Criar Empresa</h2>
+  <div class="empresa-container">
+    <h2>Criar Empresa</h2>
+    <p class="subtitle">Configure sua organização na plataforma</p>
 
-  <form id="empresaForm">
-    <input name="nome" id="nome" placeholder="Nome da empresa" required />
-    <input name="cnpj" id="cnpj" placeholder="CNPJ (opcional)" />
-    <button type="submit">Criar Empresa</button>
-  </form>
+    <!-- <div class="welcome-box">
+      <p><span class="emoji">🏢</span> Crie sua empresa e comece a gerenciar projetos e equipes de forma eficiente!</p>
+    </div> -->
 
-  <div id="result"></div>
+    <form id="empresaForm">
+      <input name="nome" id="nome" placeholder="Nome da empresa" required />
+      <input name="cnpj" id="cnpj" placeholder="CNPJ (opcional)" />
+      <button type="submit">Criar Empresa</button>
+    </form>
 
-  <p>links temporarios</p>
-    <a href="../area de login/login.html">area de login</a>
-    <a href="../cadastrarFuncionario/cadastrarFuncinario.html">cadastrar Funcinario</a>
-    <a href="../criarEmpresas/criarEmpresas.html">criar Empresas</a>
-    <a href="../singup/singup.html">criar conta</a>
+    <div id="result"></div>
+
+    <div class="chave-box" id="chaveBox">
+      <p>🔑 Chave da Empresa (UUID)</p>
+      <div class="chave-value">
+        <span id="chaveValue"></span>
+        <button class="copy-btn" onclick="copiarChave()">Copiar</button>
+      </div>
+    </div>
+
+    <!-- <div class="info-list">
+      <h3>📋 Próximos passos:</h3>
+      <ul>
+        <li>Guarde a chave da empresa em local seguro</li>
+        <li>Use a chave para cadastrar funcionários</li>
+        <li>Configure os projetos da sua empresa</li>
+      </ul>
+    </div> -->
+
+    <div class="back-link">
+      <a href="../../projeto/projeto.html">← Voltar ao painel</a>
+    </div>
+  </div>
+
 </body>
 </html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../projeto.css">
+    <script type="module" src="../projeto.js"></script>
+</head>
+<body>
+     <!-- Funcionários -->
+          <section id="funcionarios" class="section" style="display: none">
+            <div class="card">
+              <h4>Cadastro e Gerência de Funcionários</h4>
+              <div
+                style="
+                  margin-top: 10px;
+                  margin-bottom: 10px;
+                  display: flex;
+                  gap: 8px;
+                  align-items: center;
+                "
+              >
+                <input
+                  id="searchEmployee"
+                  placeholder="Pesquisar por nome ou cargo"
+                />
+                <button class="btn" id="refreshEmployees">Atualizar</button>
+              </div>
+
+              <table id="employeesTable">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Cargo</th>
+                    <th>Salário</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </section>
+
+</body>
+</html>

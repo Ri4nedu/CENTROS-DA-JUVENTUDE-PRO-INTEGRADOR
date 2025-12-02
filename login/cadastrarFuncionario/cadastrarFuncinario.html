@@ -1,29 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script type="module" src="../../js/supabaseClient.js"></script>
-  <script type="module" src="cadastrarFuncionairo.js"></script>
+  <title>Cadastrar Funcionário</title>
+  <link rel="stylesheet" href="cadastrarFuncionario.css">
+  <script type="" src="cadastrarFuncionairo.js"></script>
 </head>
 <body>
-  <form id="funcForm">
-  <input name="nome" placeholder="Nome" required />
-  <input type="email" name="email" placeholder="Email" required />
-  <input type="password" name="senha" placeholder="Senha" required />
-  <input name="chave" placeholder="Chave da empresa (UUID)" required />
-  <button type="submit">Cadastrar Funcionário</button>
-</form>
-<div id="msg"></div>
+  <div class="form-container">
+    <h2>Cadastrar Funcionário</h2>
+    <p class="subtitle">Adicione um novo colaborador à empresa</p>
+    
+    <!-- <div class="info-box">
+      <p><strong>💡 Importante:</strong> A chave da empresa é necessária para vincular o funcionário ao cadastro correto.</p>
+    </div> -->
 
-<p>links temporarios</p>
-    <a href="../area de login/login.html">area de login</a>
-    <a href="../cadastrarFuncionario/cadastrarFuncinario.html">cadastrar Funcinario</a>
-    <a href="../criarEmpresas/criarEmpresas.html">criar Empresas</a>
-    <a href="../singup/singup.html">criar conta</a>
+    <form id="funcForm">
+      <input name="nome" placeholder="Nome completo" required />
+      <input type="email" name="email" placeholder="Email corporativo" required />
+      <input type="password" name="senha" placeholder="Senha (mínimo 6 caracteres)" required />
+      <input name="chave" placeholder="Chave da empresa (UUID)" required />
+      <button type="submit">Cadastrar Funcionário</button>
+    </form>
 
+    <div id="msg"></div>
+
+    <div class="back-link">
+      <a href="../../projeto/projeto.html">← Voltar ao painel</a>
+    </div>
+  </div>
 </body>
 </html>
-
-    

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../projeto.css">
+    <script type="module" src="../projeto.js"></script>
+  </head>
+  <body>
+    <section id="cronograma" class="section" style="display: none">
+      <div class="grid">
+        <div class="card wide">
+          <h4>Cronograma de Atividades</h4>
+          <div style="margin-bottom: 12px">
+            <a
+              href="https://calendar.google.com"
+              target="_blank"
+              class="btn"
+              style="display: inline-block; text-decoration: none"
+              >📅 Abrir Google Agenda</a
+            >
+          </div>
+          <div id="scheduleList" class="list" style="margin-top: 10px"></div>
+          <div style="margin-top: 10px; display: flex; gap: 8px">
+            <input id="activityText" placeholder="Nova atividade (descrição)" />
+            <input id="activityDate" type="date" />
+            <button class="btn" id="addActivityBtn">Adicionar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

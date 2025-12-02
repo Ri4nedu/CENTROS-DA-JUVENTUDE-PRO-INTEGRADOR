@@ -6,7 +6,7 @@
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(to right, #e0eafc, #cfdef3);
+  background: white;
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -17,8 +17,8 @@ body {
   width: 90%;
   max-width: 900px;
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
 
@@ -31,7 +31,7 @@ body {
   display: flex;
   justify-content: center;
   border-bottom: 1px solid #eee;
-  background-color: #f7f7f7;
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #16a34a 100%);
 }
 
 .tab {
@@ -41,14 +41,15 @@ body {
   background: transparent;
   font-size: 1rem;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .tab:hover,
 .tab.active {
-  background-color: #dfefff;
+  background-color: rgba(255, 255, 255, 0.2);
   font-weight: bold;
-  color: #0056b3;
+  color: #ffffff;
   font-size: 1.5rem;
 }
 
@@ -87,24 +88,61 @@ body {
 
 .login-form input {
   padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
   font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.login-form input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .login-form button {
   padding: 12px;
-  background-color: #4a90e2;
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #16a34a 100%);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 1rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
 }
 
 .login-form button:hover {
-  background-color: #357ab8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.login-form p {
+  margin-top: 10px;
+  color: #666;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.login-form a {
+  display: inline-block;
+  margin-top: 5px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #16a34a 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.login-form a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  background: linear-gradient(135deg, #16a34a 0%, #3b82f6 50%, #1e3a8a 100%);
 }
 
 /* Responsivo */

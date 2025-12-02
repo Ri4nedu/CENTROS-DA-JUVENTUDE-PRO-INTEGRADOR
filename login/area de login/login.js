@@ -16,6 +16,6 @@ form.addEventListener("submit", async (e) => {
   if (error) {
     alert("Login inválido: " + error.message);
   } else {
-    window.location.href = "../../header.html";
+    window.location.href = "../../projeto/projeto.html";
   }
 });

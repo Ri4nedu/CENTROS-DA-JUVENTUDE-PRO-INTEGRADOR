@@ -6,22 +6,23 @@
   <title>Criar Conta</title>
   <script type="module" src="../../js/supabaseClient.js"></script>
   <script type="module" src="singup.js"></script>
+  <link rel="stylesheet" href="singup.css">
 </head>
 <body>
-  <h2>Crie sua conta</h2>
-  <form id="signupForm">
-    <input name="nome" placeholder="Nome completo" required />
-    <input type="email" name="email" placeholder="Email" required />
-    <input type="password" name="senha" placeholder="Senha" required />
-    <button type="submit">Cadastrar</button>
-  </form>
+  <div class="signup-container">
+    <h2>Crie sua conta</h2>
+    <form id="signupForm">
+      <input name="nome" placeholder="Nome completo" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="password" name="senha" placeholder="Senha" required />
+      <button type="submit">Cadastrar</button>
+    </form>
 
-  <div id="msg"></div>
+    <div id="msg"></div>
 
-  <p>links temporarios</p>
-    <a href="../area de login/login.html">area de login</a>
-    <a href="../cadastrarFuncionario/cadastrarFuncinario.html">cadastrar Funcinario</a>
-    <a href="../criarEmpresas/criarEmpresas.html">criar Empresas</a>
-    <a href="../singup/singup.html">criar conta</a>
+    <div class="login-link">
+      Já tem uma conta? <a href="../area de login/login.html">Fazer login</a>
+    </div>
+  </div>
 </body>
 </html>
